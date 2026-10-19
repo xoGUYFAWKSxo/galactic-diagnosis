@@ -173,6 +173,10 @@ Not recommended: auto-update checks, emailing reports, or cloud backup of report
 
 - **Exe size roughly doubles,** to about 60–70 MB. That's fine on a USB stick, and Phase 7 measures it first.
 - **WebView2 runs elevated** because the whole app does. This is supported, and keeping its data in `%TEMP%` avoids the known profile-folder problems.
-- **The Edge runtime's own updater** is a Windows service, not this app. Phase 7 checks the app itself with a network monitor.
+- **The WebView2 runtime contacts Microsoft by itself.** Phase 7 measured this (see STATUS.md):
+  - The app's own process opens no connections.
+  - Switches stop the runtime's background fetches and secure-DNS lookups, and a dead proxy plus a no-DNS rule block anything else that goes through its network stack.
+  - One HTTPS connection from the WebView2 browser process to a Microsoft 365 address remains. It goes around those switches, and no setting we found turns it off.
+  - Reports load as strings and every web request is refused, so no report data can reach it. The console exe makes no connections at all.
 - **The icon needs Python with Pillow and NumPy** at build time only, the same as the other Galactic repos. The generated `icon.ico` is committed, so normal builds don't need Python.
 - **Not tested yet:** older Windows 10 builds without WebView2. The fallback covers them, but it needs a real PC to confirm.
