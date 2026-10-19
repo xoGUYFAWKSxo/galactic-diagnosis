@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalacticDiagnosis.Core", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalacticDiagnosis.Report", "src\GalacticDiagnosis.Report\GalacticDiagnosis.Report.csproj", "{16215C64-A270-47AD-881B-77FCAF073143}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalacticDiagnosis.App", "src\GalacticDiagnosis.App\GalacticDiagnosis.App.csproj", "{B05A672D-716D-451F-9C2E-09BCBECD5599}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalacticDiagnosis.Console", "src\GalacticDiagnosis.Console\GalacticDiagnosis.Console.csproj", "{B05A672D-716D-451F-9C2E-09BCBECD5599}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalacticDiagnosis.Tests", "tests\GalacticDiagnosis.Tests\GalacticDiagnosis.Tests.csproj", "{C9CC9BBC-D546-4DA2-8447-B1FEBE49A7AD}"
 EndProject

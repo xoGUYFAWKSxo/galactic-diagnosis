@@ -11,25 +11,30 @@ public static class CollectorRunner
         return new WindowsPrincipal(id).IsInRole(WindowsBuiltInRole.Administrator);
     }
 
-    /// <summary>Runs every collector in parallel. Never throws; results come back in input order.</summary>
+    /// <summary>Runs every collector in parallel. Results come back in input order. Only cancellation throws.</summary>
     public static async Task<List<SectionResult>> RunAllAsync(
-        IReadOnlyList<ICollector> collectors, bool isAdmin, Action<SectionResult>? onDone = null)
+        IReadOnlyList<ICollector> collectors, bool isAdmin, Action<SectionResult>? onDone = null, CancellationToken ct = default)
     {
-        var tasks = collectors.Select(c => RunOneAsync(c, isAdmin, onDone));
+        var tasks = collectors.Select(c => RunOneAsync(c, isAdmin, onDone, ct));
         return [.. await Task.WhenAll(tasks)];
     }
 
-    static async Task<SectionResult> RunOneAsync(ICollector c, bool isAdmin, Action<SectionResult>? onDone)
+    static async Task<SectionResult> RunOneAsync(ICollector c, bool isAdmin, Action<SectionResult>? onDone, CancellationToken ct)
     {
         var sw = Stopwatch.StartNew();
-        using var cts = new CancellationTokenSource(c.Timeout);
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+        cts.CancelAfter(c.Timeout);
         SectionResult result;
         try
         {
             // LongRunning gives each collector its own thread so a hung WMI call can't starve the others.
             var work = Task.Factory.StartNew(() => c.Collect(cts.Token), cts.Token,
                 TaskCreationOptions.LongRunning, TaskScheduler.Default);
-            result = await work.WaitAsync(c.Timeout);
+            result = await work.WaitAsync(c.Timeout, ct);
+        }
+        catch (OperationCanceledException) when (ct.IsCancellationRequested)
+        {
+            throw;
         }
         catch (TimeoutException)
         {
