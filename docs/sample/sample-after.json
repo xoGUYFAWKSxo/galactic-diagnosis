@@ -3,12 +3,21 @@
     "customer_name": "Jordan Rivera",
     "complaint": "Takes forever to start up and feels sluggish",
     "run_type": "after",
-    "work_done": "Turned off 9 startup programs, removed an unsigned updater running from Temp, installed pending Windows updates, cleared 41 GB of temporary files"
+    "work_done": "Turned off 9 startup programs, including an unsigned updater running from Temp. Cleared 41 GB of temporary files.",
+    "work_items": [
+      "Turned off unneeded startup programs",
+      "Installed Windows updates",
+      "Cleaned up disk space",
+      "Removed malware or unwanted software"
+    ],
+    "job_number": "J1042",
+    "technician_name": "Sam"
   },
   "machine_name": "SAMPLE-PC",
   "started_at": "2026-10-18T14:20:00-04:00",
   "ran_as_admin": true,
-  "tool_version": "0.1.0",
+  "tool_version": "0.2.0",
+  "compared_with": "sample-before.json",
   "sections": [
     {
       "id": "hardware",

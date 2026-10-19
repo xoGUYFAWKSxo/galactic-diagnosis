@@ -32,7 +32,7 @@ static class Program
         {
             if (compareAt + 2 >= args.Length)
             {
-                Console.WriteLine("Usage: GalacticDiagnosis --compare <before.json> <after.json>");
+                Console.WriteLine("Usage: GalacticDiagnosis-Console --compare <before.json> <after.json>");
                 return 2;
             }
             var file = ReportStore.SaveComparison(RunFile.Load(args[compareAt + 1]), RunFile.Load(args[compareAt + 2]), args[compareAt + 2]);
@@ -46,13 +46,32 @@ static class Program
         {
             if (renderAt + 1 >= args.Length)
             {
-                Console.WriteLine("Usage: GalacticDiagnosis --render <run.json>");
+                Console.WriteLine("Usage: GalacticDiagnosis-Console --render <run.json>");
                 return 2;
             }
             var src = args[renderAt + 1];
             var page = Path.ChangeExtension(Path.GetFullPath(src), ".html");
             File.WriteAllText(page, HtmlReport.Render(RunFile.Load(src)));
             Console.WriteLine($"Report saved:\n  {page}");
+            return 0;
+        }
+
+        // The one-page customer summary; an after run includes its comparison when its before run is alongside.
+        var summaryAt = Array.IndexOf(args, "--summary");
+        if (summaryAt >= 0)
+        {
+            if (summaryAt + 1 >= args.Length)
+            {
+                Console.WriteLine("Usage: GalacticDiagnosis-Console --summary <run.json>");
+                return 2;
+            }
+            var src = Path.GetFullPath(args[summaryAt + 1]);
+            var run = RunFile.Load(src);
+            var beforePath = run.ComparedWith is { Length: > 0 } name ? Path.Combine(Path.GetDirectoryName(src)!, name) : null;
+            var comparison = beforePath is not null && File.Exists(beforePath) ? Comparison.Build(RunFile.Load(beforePath), run) : null;
+            var page = Path.Combine(Path.GetDirectoryName(src)!, Path.GetFileNameWithoutExtension(src) + "_summary.html");
+            File.WriteAllText(page, SummaryReport.Render(run, comparison));
+            Console.WriteLine($"Summary saved:\n  {page}");
             return 0;
         }
 

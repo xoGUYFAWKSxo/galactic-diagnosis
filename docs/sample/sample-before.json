@@ -3,12 +3,15 @@
                    "customer_name":  "Jordan Rivera",
                    "complaint":  "Takes forever to start up and feels sluggish",
                    "run_type":  "before",
-                   "work_done":  ""
+                   "work_done":  "",
+                   "work_items":  [],
+                   "job_number":  "J1042",
+                   "technician_name":  "Sam"
                },
     "machine_name":  "SAMPLE-PC",
     "started_at":  "2026-10-15T10:12:00-04:00",
     "ran_as_admin":  true,
-    "tool_version":  "0.1.0",
+    "tool_version":  "0.2.0",
     "sections":  [
                      {
                          "id":  "hardware",

@@ -282,14 +282,14 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
-                    <StackPanel Orientation="Horizontal" Background="Transparent">
-                        <Border x:Name="Box" Width="18" Height="18" CornerRadius="4" BorderThickness="1.5"
-                                BorderBrush="{DynamicResource Muted}" Background="{DynamicResource PanelAlt}" VerticalAlignment="Center">
+                    <DockPanel Background="Transparent">
+                        <Border x:Name="Box" DockPanel.Dock="Left" Width="18" Height="18" CornerRadius="4" BorderThickness="1.5"
+                                BorderBrush="{DynamicResource Muted}" Background="{DynamicResource PanelAlt}" VerticalAlignment="Top" Margin="0,1,0,0">
                             <Path x:Name="Tick" Data="M3,9 L7,13 L15,4" Stroke="{DynamicResource AccentInk}" StrokeThickness="2.2"
                                   Visibility="Collapsed" Margin="0,0,0,0" />
                         </Border>
-                        <ContentPresenter Margin="10,0,0,0" VerticalAlignment="Center" />
-                    </StackPanel>
+                        <ContentPresenter Margin="10,0,0,0" VerticalAlignment="Top" />
+                    </DockPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="Box" Property="Background" Value="{DynamicResource Accent}" />
@@ -394,14 +394,14 @@
     <!-- Technician checklist: two columns of tick boxes, with a "Suggested" tag from the before check. -->
     <DataTemplate x:Key="ChecklistEntryTemplate">
         <CheckBox IsChecked="{Binding IsChecked}" Margin="0,5,16,5" AutomationProperties.Name="{Binding Text}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Text}" TextWrapping="Wrap" VerticalAlignment="Center" />
-                <Border CornerRadius="8" BorderBrush="{DynamicResource Accent}" BorderThickness="1" Padding="6,0" Margin="8,0,0,0"
+            <WrapPanel>
+                <TextBlock Text="{Binding Text}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,8,0" />
+                <Border CornerRadius="8" BorderBrush="{DynamicResource Accent}" BorderThickness="1" Padding="6,0"
                         VerticalAlignment="Center" Visibility="{Binding IsSuggested, Converter={StaticResource ShowIf}}"
                         ToolTip="The before check found a problem this usually fixes.">
                     <TextBlock Text="Suggested" FontSize="11" Foreground="{DynamicResource Accent}" />
                 </Border>
-            </StackPanel>
+            </WrapPanel>
         </CheckBox>
     </DataTemplate>
 
