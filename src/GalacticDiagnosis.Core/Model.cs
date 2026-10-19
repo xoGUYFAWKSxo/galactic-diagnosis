@@ -27,10 +27,10 @@ public sealed class SectionResult
     /// <summary>The sentence a customer reads, e.g. "This drive has used 87% of its rated life. Replace it soon."</summary>
     public string Summary { get; set; } = "";
 
-    public List<Item> Items { get; } = [];
+    public List<Item> Items { get; init; } = [];
 
     /// <summary>Numbers kept for before/after comparison, e.g. "boot_ms" or "C:.free_gb".</summary>
-    public Dictionary<string, double> Metrics { get; } = [];
+    public Dictionary<string, double> Metrics { get; init; } = [];
 
     /// <summary>Technical detail when the section couldn't be read. Not shown as the summary.</summary>
     public string? Error { get; set; }
@@ -51,6 +51,9 @@ public sealed class Intake
 
     /// <summary>"before" or "after".</summary>
     public string RunType { get; set; } = "before";
+
+    /// <summary>What the technician did. Asked on "after" runs and shown on the comparison report.</summary>
+    public string WorkDone { get; set; } = "";
 }
 
 public sealed class DiagnosticRun

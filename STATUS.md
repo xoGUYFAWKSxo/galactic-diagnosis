@@ -27,8 +27,16 @@ Plan: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md)
 - 37 tests total.
 - Verified elevated and unelevated on the dev PC. Elevated: last boot 37 s, median 31 s, with all 10 sections readable. Unelevated, startup time correctly shows "run as administrator".
 
-## Next — Phase 4 (intake and comparison)
-Intake prompts and JSON already exist. Still to do: a comparison report that reads two JSON files and shows changes like "Boot time: 94s → 22s" (metrics keys are in each section's `metrics`).
+## Done — Phase 4 (intake and comparison), 2026-10-18
+- Intake order: name → before/after → complaint (before) or "what was done" (after; `--work`). An after run takes the complaint from its before run.
+- `RunFile` (Core) saves and loads the JSON. Section `Items` and `Metrics` are `init`-able so they survive deserialization.
+- `Comparison.Build(before, after)`: a table of known metrics with friendly labels, units, better/worse direction and a noise tolerance (boot ±2 s, disk ±0.5 GB). Metrics without a definition (temperatures, 30-day crash counts) are left out, and their sections still show verdict changes.
+- `ComparisonReport`: Results (one headline per area), Measurements, Area by area, Still needs attention. It warns if the two runs come from different PCs.
+- An after run auto-finds the latest before run from the same PC in `Reports` (preferring the same customer name) and writes `<Name>_<date>_comparison.html`. Manual: `GalacticDiagnosis --compare before.json after.json`.
+- 43 tests. Verified the auto-compare on a real before/after pair, and checked the rendered page with a doctored "slow PC" before file.
+
+## Next — Phase 5 (polish)
+README with a sample-report screenshot, then a GitHub release with the exe attached. The MIT license is already in.
 
 ## Build / run
 - Publish: `dotnet publish src\GalacticDiagnosis.App -c Release -o publish` → `publish\GalacticDiagnosis.exe` (~34 MB, self-contained, single file).

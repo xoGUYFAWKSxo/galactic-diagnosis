@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
 using GalacticDiagnosis.Core;
 using GalacticDiagnosis.Core.Collectors;
 using GalacticDiagnosis.Report;
@@ -31,6 +30,19 @@ static class Program
         var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "dev";
         Console.WriteLine($"Galactic Diagnosis {version}\n");
 
+        var compareAt = Array.IndexOf(args, "--compare");
+        if (compareAt >= 0)
+        {
+            if (compareAt + 2 >= args.Length)
+            {
+                Console.WriteLine("Usage: GalacticDiagnosis --compare <before.json> <after.json>");
+                return 2;
+            }
+            var file = SaveComparison(RunFile.Load(args[compareAt + 1]), RunFile.Load(args[compareAt + 2]), args[compareAt + 2]);
+            Console.WriteLine($"Comparison saved:\n  {file}");
+            return 0;
+        }
+
         var isAdmin = CollectorRunner.IsAdmin();
         if (!isAdmin)
         {
@@ -41,6 +53,9 @@ static class Program
         }
 
         var intake = ReadIntake(args);
+        var dir = Path.Combine(AppContext.BaseDirectory, "Reports");
+        var before = intake.RunType == "after" ? FindBeforeRun(dir, intake.CustomerName) : null;
+        if (before is not null && intake.Complaint.Length == 0) intake.Complaint = before.Intake.Complaint;
 
         ICollector[] collectors =
         [
@@ -66,41 +81,72 @@ static class Program
             Sections = sections,
         };
 
-        var dir = Path.Combine(AppContext.BaseDirectory, "Reports");
         Directory.CreateDirectory(dir);
         var stem = UniqueStem(dir, $"{FileSafe(LastName(intake.CustomerName))}_{startedAt:yyyy-MM-dd}_{intake.RunType}");
         var html = Path.Combine(dir, stem + ".html");
         var json = Path.Combine(dir, stem + ".json");
         await File.WriteAllTextAsync(html, HtmlReport.Render(run));
-        await File.WriteAllTextAsync(json, JsonSerializer.Serialize(run, JsonOpts));
-
+        await File.WriteAllTextAsync(json, RunFile.Serialize(run));
         Console.WriteLine($"\nReport saved:\n  {html}\n  {json}");
+
+        if (intake.RunType == "after")
+        {
+            if (before is not null)
+                Console.WriteLine($"\nCompared with the before check from {before.StartedAt:yyyy-MM-dd HH:mm}:\n  {SaveComparison(before, run, json)}");
+            else
+                Console.WriteLine("\nNo before check for this customer on this PC was found in the Reports folder, so no comparison was made.");
+        }
+
         Pause(args);
         return 0;
     }
 
-    static readonly JsonSerializerOptions JsonOpts = new()
+    /// <summary>Writes the comparison next to the after file: Smith_2026-10-18_after.json → Smith_2026-10-18_comparison.html.</summary>
+    static string SaveComparison(DiagnosticRun before, DiagnosticRun after, string afterPath)
     {
-        WriteIndented = true,
-        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
-        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping, // keep "—" readable; file is never embedded in HTML
-    };
+        var dir = Path.GetDirectoryName(Path.GetFullPath(afterPath))!;
+        var stem = Path.GetFileNameWithoutExtension(afterPath);
+        stem = stem.Contains("_after") ? stem.Replace("_after", "_comparison") : stem + "_comparison";
+        var path = Path.Combine(dir, stem + ".html");
+        File.WriteAllText(path, ComparisonReport.Render(Comparison.Build(before, after)));
+        return path;
+    }
 
-    /// <summary>Prompts for intake, or takes it from --name / --complaint / --after for scripted runs.</summary>
+    /// <summary>Latest "before" run from this PC, preferring one for the same customer.</summary>
+    static DiagnosticRun? FindBeforeRun(string dir, string customer)
+    {
+        if (!Directory.Exists(dir)) return null;
+        var runs = new List<DiagnosticRun>();
+        foreach (var f in Directory.GetFiles(dir, "*.json"))
+        {
+            try { runs.Add(RunFile.Load(f)); }
+            catch (Exception ex) when (ex is IOException or InvalidDataException or UnauthorizedAccessException) { }
+        }
+        return runs
+            .Where(r => r.Intake.RunType == "before" && r.MachineName.Equals(Environment.MachineName, StringComparison.OrdinalIgnoreCase))
+            .OrderByDescending(r => customer.Length > 0 && r.Intake.CustomerName.Equals(customer, StringComparison.OrdinalIgnoreCase))
+            .ThenByDescending(r => r.StartedAt)
+            .FirstOrDefault();
+    }
+
+    /// <summary>Prompts for intake, or takes it from --name / --complaint / --work / --after for scripted runs.</summary>
     static Intake ReadIntake(string[] args)
     {
         var intake = new Intake
         {
             CustomerName = Arg(args, "--name") ?? "",
             Complaint = Arg(args, "--complaint") ?? "",
+            WorkDone = Arg(args, "--work") ?? "",
             RunType = args.Contains("--after") ? "after" : "before",
         };
         if (args.Contains("--no-prompt")) return intake;
 
         if (intake.CustomerName.Length == 0) intake.CustomerName = Ask("Customer name");
-        if (intake.Complaint.Length == 0) intake.Complaint = Ask("Problem they reported");
         if (!args.Contains("--after") && !args.Contains("--before"))
             intake.RunType = Ask("Before or after service? [B/a]").StartsWith("a", StringComparison.OrdinalIgnoreCase) ? "after" : "before";
+        // An after run takes the complaint from the matching before run, so ask what was done instead.
+        if (intake.RunType == "before" && intake.Complaint.Length == 0) intake.Complaint = Ask("Problem they reported");
+        if (intake.RunType == "after" && intake.WorkDone.Length == 0) intake.WorkDone = Ask("What was done");
         return intake;
     }
 
