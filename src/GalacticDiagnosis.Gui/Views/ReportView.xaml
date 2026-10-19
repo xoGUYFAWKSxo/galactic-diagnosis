@@ -26,7 +26,8 @@
                 <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" FontSize="16" FontWeight="SemiBold" Margin="2,0,0,10"
                            TextTrimming="CharacterEllipsis" />
                 <ListBox DockPanel.Dock="Left" Style="{StaticResource SegmentList}" ItemsSource="{Binding Tabs}"
-                         SelectedItem="{Binding Selected}" DisplayMemberPath="Header" AutomationProperties.Name="Report pages" />
+                         SelectedItem="{Binding Selected}" DisplayMemberPath="Header" AutomationProperties.Name="Report pages"
+                         VerticalAlignment="Top" />
                 <WrapPanel HorizontalAlignment="Right">
                     <Button Command="{Binding StartEditCommand}" Margin="8,0,0,4" ToolTip="Change the notes on this check"
                             Visibility="{Binding CanEditNotes, Converter={StaticResource Visible}}" AutomationProperties.Name="Edit notes">
@@ -50,17 +51,28 @@
                             <TextBlock Text="Leave a copy" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding OpenInBrowserCommand}" Margin="8,0,0,4" ToolTip="Open this page in the web browser">
+                    <Button Command="{Binding CopySummaryCommand}" Margin="8,0,0,4" ToolTip="Copy a plain-text summary for an invoice, ticket or message"
+                            Visibility="{Binding CanCopySummary, Converter={StaticResource Visible}}" AutomationProperties.Name="Copy summary">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE774;" Style="{StaticResource IconText}" />
-                            <TextBlock Text="Open in browser" />
+                            <TextBlock Text="&#xE8C8;" Style="{StaticResource IconText}" />
+                            <TextBlock Text="Copy summary" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding ShowInFolderCommand}" Margin="8,0,0,4" ToolTip="Show the saved files in Explorer">
+                    <ToggleButton IsChecked="{Binding ShowFixPanel}" Margin="8,0,0,4" Style="{StaticResource ToggleChip}"
+                                  ToolTip="Show or hide shortcuts to the Windows tools that fix these findings"
+                                  Visibility="{Binding HasFixItems, Converter={StaticResource Visible}}" AutomationProperties.Name="Fix it">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE838;" Style="{StaticResource IconText}" />
-                            <TextBlock Text="Show in folder" />
+                            <TextBlock Text="&#xE90F;" Style="{StaticResource IconText}" />
+                            <TextBlock Text="Fix it" />
                         </StackPanel>
+                    </ToggleButton>
+                    <Button Command="{Binding OpenInBrowserCommand}" Margin="8,0,0,4" Padding="10,7" ToolTip="Open this page in the web browser"
+                            AutomationProperties.Name="Open in browser">
+                        <TextBlock Text="&#xE774;" Style="{StaticResource IconText}" Margin="0" />
+                    </Button>
+                    <Button Command="{Binding ShowInFolderCommand}" Margin="8,0,0,4" Padding="10,7" ToolTip="Show the saved files in Explorer"
+                            AutomationProperties.Name="Show in folder">
+                        <TextBlock Text="&#xE838;" Style="{StaticResource IconText}" Margin="0" />
                     </Button>
                 </WrapPanel>
             </DockPanel>
@@ -98,6 +110,69 @@
                 <TextBlock Style="{StaticResource MutedText}" Margin="0,4,0,0"
                            Text="This PC doesn't have the Microsoft Edge WebView2 runtime, which shows reports inside this window. Nothing is missing from the report itself; use Open in browser to show a page again, and the browser's Print to save a PDF." />
             </StackPanel>
+        </Border>
+
+        <!-- Fix it: shortcuts to Windows' own tools, and Check again. Never changes the saved report. -->
+        <Border DockPanel.Dock="Right" Width="320" Margin="0,0,18,18" Style="{StaticResource Card}" Padding="0"
+                Visibility="{Binding ShowFixPanel, Converter={StaticResource Visible}}">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Margin="18,14,18,8">
+                    <TextBlock Text="Fix it" FontSize="16" FontWeight="SemiBold" />
+                    <TextBlock Style="{StaticResource MutedText}" FontSize="12" Margin="0,2,0,0"
+                               Text="These open Windows' own tools. This app doesn't change anything; run an after check to show the difference." />
+                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding FixItems}" Margin="12,0,12,12" AutomationProperties.Name="Fix it list">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{DynamicResource PanelAlt}" CornerRadius="8" Padding="12,10" Margin="0,0,0,8">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Ellipse Style="{StaticResource VerdictDot}" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                            <TextBlock Text="{Binding Title}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                            <TextBlock Text="{Binding Label}" Style="{StaticResource VerdictText}" Margin="8,0,0,0" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding Summary}" Style="{StaticResource MutedText}" FontSize="12" Margin="0,4,0,0" />
+                                        <TextBlock Text="{Binding Note}" Foreground="{DynamicResource Warning}" FontSize="12" TextWrapping="Wrap" Margin="0,4,0,0"
+                                                   Visibility="{Binding Note, Converter={StaticResource Visible}}" />
+                                        <ItemsControl x:Name="ActionList" ItemsSource="{Binding Actions}" Margin="0,6,0,0" Tag="{Binding}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="{Binding Label}" ToolTip="{Binding ToolTip}" Padding="10,4" FontSize="12" Margin="0,4,6,0"
+                                                            Command="{Binding Tag.LaunchCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                            CommandParameter="{Binding}" AutomationProperties.Name="{Binding Label}" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                            <Button Style="{StaticResource QuietButton}" Padding="0,2" FontSize="12"
+                                                    Command="{Binding CheckAgainCommand}" Foreground="{DynamicResource Accent}"
+                                                    AutomationProperties.Name="{Binding Title, StringFormat='Check {0} again'}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="&#xE72C;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                                    <TextBlock Text="Check again" />
+                                                </StackPanel>
+                                            </Button>
+                                            <Path Style="{StaticResource Spinner}" Margin="8,0,0,0" Width="12" Height="12"
+                                                  Visibility="{Binding Checking, Converter={StaticResource Visible}}" />
+                                        </StackPanel>
+                                        <StackPanel DataContext="{Binding Recheck}" Visibility="{Binding Converter={StaticResource Visible}}" Margin="0,4,0,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Style="{StaticResource VerdictDot}" Width="8" Height="8" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                                <TextBlock Text="{Binding Text}" Style="{StaticResource VerdictText}" />
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Summary}" Style="{StaticResource MutedText}" FontSize="12" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
         </Border>
 
         <Border Margin="18,0,18,18" CornerRadius="10" BorderThickness="1" BorderBrush="{DynamicResource Line}" ClipToBounds="True"

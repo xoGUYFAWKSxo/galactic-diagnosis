@@ -82,18 +82,32 @@ public static class ComparisonReport
         return sb.ToString();
     }
 
+    /// <summary>One improvement: "Startup time (last boot)", "128 s → 34 s", "94 s faster" (Delta is null for a verdict change).</summary>
+    public sealed record Headline(string Label, string Change, string? Delta);
+
     /// <summary>One headline per improved area: its first improved measurement, or else its verdict change.</summary>
-    internal static string ResultsList(ComparisonResult c)
+    public static List<Headline> Headlines(ComparisonResult c)
     {
         var better = c.Metrics.Where(m => m.Change == Change.Better).GroupBy(m => m.Section).Select(g => g.First()).ToList();
-        var fixedAreas = c.Sections.Where(s => s.Change == Change.Better && better.All(m => m.Section != s.Id)).ToList();
-        if (better.Count + fixedAreas.Count == 0)
+        var fixedAreas = c.Sections.Where(s => s.Change == Change.Better && better.All(m => m.Section != s.Id));
+        return
+        [
+            .. better.Select(m => new Headline(m.Label, $"{m.BeforeText} → {m.AfterText}", m.DeltaText)),
+            .. fixedAreas.Select(s => new Headline(s.Title, $"{Label(s.Before!.Value)} → {Label(s.After!.Value)}", null)),
+        ];
+    }
+
+    internal static string ResultsList(ComparisonResult c)
+    {
+        var lines = Headlines(c);
+        if (lines.Count == 0)
             return """<p class="summary">No measured changes between the two checks.</p>""";
         var sb = new StringBuilder("""<ul class="wins">""");
-        foreach (var m in better)
-            sb.Append($"""<li><span class="pill better">Better</span><span><strong>{E(m.Label)}:</strong> {E(m.BeforeText)} → {E(m.AfterText)} <span class="delta">({E(m.DeltaText)})</span></span></li>""");
-        foreach (var s in fixedAreas)
-            sb.Append($"""<li><span class="pill better">Better</span><span><strong>{E(s.Title)}:</strong> {E(Label(s.Before!.Value))} → {E(Label(s.After!.Value))}</span></li>""");
+        foreach (var h in lines)
+        {
+            var delta = h.Delta is null ? "" : $""" <span class="delta">({E(h.Delta)})</span>""";
+            sb.Append($"""<li><span class="pill better">Better</span><span><strong>{E(h.Label)}:</strong> {E(h.Change)}{delta}</span></li>""");
+        }
         sb.Append("</ul>");
         return sb.ToString();
     }

@@ -49,6 +49,29 @@ public class ChecklistTests
     }
 
     [Fact]
+    public void Plain_text_summary_for_an_after_run()
+    {
+        var before = Run("before", ("boot_time", Verdict.Warning), ("battery", Verdict.Good));
+        before.Sections[0].Metrics["boot_ms"] = 94_000;
+        var after = Run("after", ("boot_time", Verdict.Good), ("battery", Verdict.Warning));
+        after.Sections[0].Metrics["boot_ms"] = 31_000;
+        after.Intake.JobNumber = "J7";
+        after.Intake.WorkItems = ["Turned off unneeded startup programs"];
+        var text = SummaryText.Render(after, Comparison.Build(before, after));
+        Assert.StartsWith("PC check: Pat Smith (job J7)", text);
+        Assert.Contains("Reported problem: Slow", text);
+        Assert.Contains("Work done: Turned off unneeded startup programs.", text);
+        Assert.Contains("- Startup time (last boot): 94 s → 31 s (63 s faster)", text);
+        Assert.Contains("Still needs attention:\r\n- battery title (Needs attention): battery summary".Replace("\r\n", Environment.NewLine), text);
+        Assert.Contains("Good: boot_time title", text);
+        Assert.DoesNotContain("<", text);
+    }
+
+    [Fact]
+    public void Plain_text_summary_for_a_healthy_before_run() =>
+        Assert.Contains("- Everything we checked looks healthy.", SummaryText.Render(Run("before", ("updates", Verdict.Good))));
+
+    [Fact]
     public void Summary_shows_findings_for_a_before_run()
     {
         var html = SummaryReport.Render(Run("before", ("startup", Verdict.Warning), ("updates", Verdict.Good)));
