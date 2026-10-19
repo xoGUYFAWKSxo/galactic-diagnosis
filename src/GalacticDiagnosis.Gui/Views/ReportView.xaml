@@ -11,29 +11,83 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Margin" Value="0,0,8,0" />
         </Style>
+        <Style x:Key="Multiline" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="AcceptsReturn" Value="True" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="MinHeight" Value="60" />
+            <Setter Property="MaxHeight" Value="140" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        </Style>
     </UserControl.Resources>
     <DockPanel>
         <!-- Toolbar: page tabs on the left, actions on the right. -->
         <Border DockPanel.Dock="Top" Padding="18,12,18,10">
             <DockPanel>
-                <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" FontSize="16" FontWeight="SemiBold" Margin="2,0,0,10" />
+                <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" FontSize="16" FontWeight="SemiBold" Margin="2,0,0,10"
+                           TextTrimming="CharacterEllipsis" />
                 <ListBox DockPanel.Dock="Left" Style="{StaticResource SegmentList}" ItemsSource="{Binding Tabs}"
                          SelectedItem="{Binding Selected}" DisplayMemberPath="Header" AutomationProperties.Name="Report pages" />
-                <StackPanel x:Name="Actions" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Command="{Binding OpenInBrowserCommand}" Margin="8,0,0,0" ToolTip="Open this page in the web browser">
+                <WrapPanel HorizontalAlignment="Right">
+                    <Button Command="{Binding StartEditCommand}" Margin="8,0,0,4" ToolTip="Change the notes on this check"
+                            Visibility="{Binding CanEditNotes, Converter={StaticResource Visible}}" AutomationProperties.Name="Edit notes">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE70F;" Style="{StaticResource IconText}" />
+                            <TextBlock Text="Edit notes" />
+                        </StackPanel>
+                    </Button>
+                    <Button Click="SavePdf_Click" Margin="8,0,0,4" ToolTip="Save this page as a PDF"
+                            Visibility="{Binding CanPdf, Converter={StaticResource Visible}}" AutomationProperties.Name="Save as PDF">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xEA90;" Style="{StaticResource IconText}" />
+                            <TextBlock Text="Save as PDF" />
+                        </StackPanel>
+                    </Button>
+                    <Button Click="LeaveCopy_Click" Margin="8,0,0,4"
+                            ToolTip="Save the customer summary (and before/after page) as PDFs on this PC's Desktop"
+                            Visibility="{Binding CanLeaveCopy, Converter={StaticResource Visible}}" AutomationProperties.Name="Leave a copy for the customer">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8A7;" Style="{StaticResource IconText}" />
+                            <TextBlock Text="Leave a copy" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding OpenInBrowserCommand}" Margin="8,0,0,4" ToolTip="Open this page in the web browser">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE774;" Style="{StaticResource IconText}" />
                             <TextBlock Text="Open in browser" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding ShowInFolderCommand}" Margin="8,0,0,0" ToolTip="Show the saved files in Explorer">
+                    <Button Command="{Binding ShowInFolderCommand}" Margin="8,0,0,4" ToolTip="Show the saved files in Explorer">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE838;" Style="{StaticResource IconText}" />
                             <TextBlock Text="Show in folder" />
                         </StackPanel>
                     </Button>
-                </StackPanel>
+                </WrapPanel>
             </DockPanel>
+        </Border>
+
+        <!-- Edit notes -->
+        <Border DockPanel.Dock="Top" Style="{StaticResource Card}" Margin="18,0,18,12"
+                Visibility="{Binding IsEditing, Converter={StaticResource Visible}}">
+            <StackPanel>
+                <StackPanel Visibility="{Binding IsAfterRun, Converter={StaticResource Hidden}}">
+                    <TextBlock Text="Problem the customer reported" Style="{StaticResource Label}" Margin="0,0,0,6" />
+                    <TextBox Style="{StaticResource Multiline}" Text="{Binding EditComplaint, UpdateSourceTrigger=PropertyChanged}"
+                             AutomationProperties.Name="Edit problem" />
+                </StackPanel>
+                <StackPanel Visibility="{Binding IsAfterRun, Converter={StaticResource Visible}}">
+                    <TextBlock Text="What was done" Style="{StaticResource Label}" Margin="0,0,0,6" />
+                    <ItemsControl ItemsSource="{Binding EditChecklist.Entries}" ItemTemplate="{StaticResource ChecklistEntryTemplate}"
+                                  ItemsPanel="{StaticResource TwoColumns}" Focusable="False" />
+                    <TextBlock Text="Other notes" Style="{StaticResource Label}" />
+                    <TextBox Style="{StaticResource Multiline}" Text="{Binding EditNotes, UpdateSourceTrigger=PropertyChanged}"
+                             AutomationProperties.Name="Edit notes text" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                    <Button Style="{StaticResource PrimaryButton}" Content="Save notes" Command="{Binding SaveNotesCommand}" />
+                    <Button Style="{StaticResource QuietButton}" Content="Cancel" Margin="10,0,0,0" Command="{Binding CancelEditCommand}" />
+                </StackPanel>
+            </StackPanel>
         </Border>
 
         <!-- No WebView2 runtime: the report opens in the browser instead. -->
@@ -42,7 +96,7 @@
             <StackPanel>
                 <TextBlock Text="This report opened in your web browser" FontWeight="SemiBold" />
                 <TextBlock Style="{StaticResource MutedText}" Margin="0,4,0,0"
-                           Text="This PC doesn't have the Microsoft Edge WebView2 runtime, which shows reports inside this window. Nothing is missing from the report itself; use Open in browser to show it again." />
+                           Text="This PC doesn't have the Microsoft Edge WebView2 runtime, which shows reports inside this window. Nothing is missing from the report itself; use Open in browser to show a page again, and the browser's Print to save a PDF." />
             </StackPanel>
         </Border>
 

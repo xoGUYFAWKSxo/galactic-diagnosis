@@ -97,7 +97,10 @@
                         </ListBox>
                         <TextBlock Style="{StaticResource MutedText}" Text="{Binding CompareNote}" FontSize="13" />
 
-                        <TextBlock Text="What was done" Style="{StaticResource Label}" />
+                        <TextBlock Text="What was done (tick all that apply)" Style="{StaticResource Label}" />
+                        <ItemsControl ItemsSource="{Binding Checklist.Entries}" ItemTemplate="{StaticResource ChecklistEntryTemplate}"
+                                      ItemsPanel="{StaticResource TwoColumns}" Focusable="False" AutomationProperties.Name="Jobs done" />
+                        <TextBlock Text="Other notes (optional)" Style="{StaticResource Label}" />
                         <TextBox Style="{StaticResource Multiline}" Text="{Binding WorkDone, UpdateSourceTrigger=PropertyChanged}"
                                  AutomationProperties.Name="What was done" />
                     </StackPanel>

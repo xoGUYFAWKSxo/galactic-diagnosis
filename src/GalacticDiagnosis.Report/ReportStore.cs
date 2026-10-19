@@ -6,6 +6,8 @@ namespace GalacticDiagnosis.Report;
 public sealed record SavedRun(string JsonPath, DiagnosticRun Run)
 {
     public string HtmlPath => Path.ChangeExtension(JsonPath, ".html");
+
+    public override string ToString() => Path.GetFileNameWithoutExtension(JsonPath);
 }
 
 /// <summary>The Reports folder: file naming, saving, listing and before/after pairing.</summary>

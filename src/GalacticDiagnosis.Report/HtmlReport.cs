@@ -37,8 +37,7 @@ public static class HtmlReport
             """);
         if (!string.IsNullOrWhiteSpace(run.Intake.Complaint))
             sb.Append($"""<p class="complaint"><strong>Reported problem:</strong> {E(run.Intake.Complaint)}</p>""");
-        if (run.Intake.RunType == "after" && !string.IsNullOrWhiteSpace(run.Intake.WorkDone))
-            sb.Append($"""<p class="complaint"><strong>Work done:</strong> {E(run.Intake.WorkDone)}</p>""");
+        if (run.Intake.RunType == "after") sb.Append(WorkDone(run.Intake));
         sb.Append("</header>");
 
         sb.Append($"""
@@ -89,6 +88,21 @@ public static class HtmlReport
 
     internal static string E(string? s) => WebUtility.HtmlEncode(s ?? "");
 
+    /// <summary>"Work done": ticked checklist jobs as a list, then the technician's own notes. Empty when there's neither.</summary>
+    internal static string WorkDone(Intake intake, bool labelled = true)
+    {
+        var notes = intake.WorkDone.Trim();
+        var label = labelled ? "<strong>Work done:</strong> " : "";
+        if (intake.WorkItems.Count == 0 && notes.Length == 0) return "";
+        if (intake.WorkItems.Count == 0) return $"""<p class="complaint">{label}{E(notes)}</p>""";
+        var sb = new StringBuilder(labelled ? """<p class="complaint"><strong>Work done:</strong></p>""" : "");
+        sb.Append("""<ul class="work">""");
+        foreach (var item in intake.WorkItems) sb.Append($"<li>{E(item)}</li>");
+        sb.Append("</ul>");
+        if (notes.Length > 0) sb.Append($"""<p class="notes">{E(notes)}</p>""");
+        return sb.ToString();
+    }
+
     /// <summary>Job number and "Checked by" header entries, when given.</summary>
     internal static string ShopMeta(Intake intake)
     {
@@ -125,6 +139,7 @@ public static class HtmlReport
         .meta dt{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
         .meta dd{margin:0;font-weight:600}
         .complaint{margin:14px 0 0}
+        ul.work{margin:4px 0 0;padding-left:22px} ul.work li{margin:2px 0} .notes{margin:6px 0 0}
         .pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px;white-space:nowrap}
         .good{color:var(--good);background:var(--good-bg)} .warning{color:var(--warning);background:var(--warning-bg)}
         .bad{color:var(--bad);background:var(--bad-bg)} .unavailable{color:var(--unavailable);background:var(--unavailable-bg)}

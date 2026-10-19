@@ -35,27 +35,13 @@ public static class ComparisonReport
             """);
         if (complaint.Length > 0)
             sb.Append($"""<p class="complaint"><strong>Reported problem:</strong> {E(complaint)}</p>""");
-        if (c.After.Intake.WorkDone.Length > 0)
-            sb.Append($"""<p class="complaint"><strong>Work done:</strong> {E(c.After.Intake.WorkDone)}</p>""");
+        sb.Append(WorkDone(c.After.Intake));
         if (!c.SameMachine)
             sb.Append($"""<p class="mismatch">These two checks were run on different computers ({E(c.Before.MachineName)} and {E(c.After.MachineName)}), so the comparison may not be meaningful.</p>""");
         sb.Append("</header>");
 
-        // One headline per area: its first improved measurement, or else its verdict change.
-        var better = c.Metrics.Where(m => m.Change == Change.Better).GroupBy(m => m.Section).Select(g => g.First()).ToList();
-        var fixedAreas = c.Sections.Where(s => s.Change == Change.Better && better.All(m => m.Section != s.Id)).ToList();
         sb.Append("""<section class="glance"><h2>Results</h2>""");
-        if (better.Count + fixedAreas.Count == 0)
-            sb.Append("""<p class="summary">No measured changes between the two checks.</p>""");
-        else
-        {
-            sb.Append("""<ul class="wins">""");
-            foreach (var m in better)
-                sb.Append($"""<li><span class="pill better">Better</span><span><strong>{E(m.Label)}:</strong> {E(m.BeforeText)} → {E(m.AfterText)} <span class="delta">({E(m.DeltaText)})</span></span></li>""");
-            foreach (var s in fixedAreas)
-                sb.Append($"""<li><span class="pill better">Better</span><span><strong>{E(s.Title)}:</strong> {E(Label(s.Before!.Value))} → {E(Label(s.After!.Value))}</span></li>""");
-            sb.Append("</ul>");
-        }
+        sb.Append(ResultsList(c));
         sb.Append("</section>");
 
         if (c.Metrics.Count > 0)
@@ -96,6 +82,22 @@ public static class ComparisonReport
         return sb.ToString();
     }
 
+    /// <summary>One headline per improved area: its first improved measurement, or else its verdict change.</summary>
+    internal static string ResultsList(ComparisonResult c)
+    {
+        var better = c.Metrics.Where(m => m.Change == Change.Better).GroupBy(m => m.Section).Select(g => g.First()).ToList();
+        var fixedAreas = c.Sections.Where(s => s.Change == Change.Better && better.All(m => m.Section != s.Id)).ToList();
+        if (better.Count + fixedAreas.Count == 0)
+            return """<p class="summary">No measured changes between the two checks.</p>""";
+        var sb = new StringBuilder("""<ul class="wins">""");
+        foreach (var m in better)
+            sb.Append($"""<li><span class="pill better">Better</span><span><strong>{E(m.Label)}:</strong> {E(m.BeforeText)} → {E(m.AfterText)} <span class="delta">({E(m.DeltaText)})</span></span></li>""");
+        foreach (var s in fixedAreas)
+            sb.Append($"""<li><span class="pill better">Better</span><span><strong>{E(s.Title)}:</strong> {E(Label(s.Before!.Value))} → {E(Label(s.After!.Value))}</span></li>""");
+        sb.Append("</ul>");
+        return sb.ToString();
+    }
+
     static string ChangeCls(Change c) => $"row-{c.ToString().ToLowerInvariant()}";
 
     static string ChangePill(Change c, string delta) => c switch
@@ -110,7 +112,7 @@ public static class ComparisonReport
         ? $"""<span class="pill {Cls(x)}">{Label(x)}</span>"""
         : """<span class="nochange">Not checked</span>""";
 
-    const string ExtraCss = """
+    internal const string ExtraCss = """
         .wins,.open{list-style:none;margin:0;padding:0}
         .wins li,.open li{display:flex;gap:12px;align-items:baseline;padding:8px 0;border-top:1px solid var(--line)}
         .wins li:first-child,.open li:first-child{border-top:0}

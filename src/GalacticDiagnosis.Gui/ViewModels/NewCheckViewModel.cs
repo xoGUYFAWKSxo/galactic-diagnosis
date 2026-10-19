@@ -23,6 +23,7 @@ public sealed partial class NewCheckViewModel : ObservableObject
     }
 
     public MainViewModel Main { get; }
+    public ChecklistViewModel Checklist { get; } = new();
 
     /// <summary>Before checks from this PC, newest first.</summary>
     public IReadOnlyList<SavedRun> BeforeRuns { get; }
@@ -69,6 +70,7 @@ public sealed partial class NewCheckViewModel : ObservableObject
     partial void OnSelectedBeforeChanged(SavedRun? value)
     {
         if (!_pickingBefore) _userPickedBefore = true;
+        Checklist.Suggest(value?.Run);
     }
 
     /// <summary>Same rule as the console: latest before check from this PC, preferring the same customer.</summary>
@@ -98,6 +100,7 @@ public sealed partial class NewCheckViewModel : ObservableObject
             RunType = IsAfter ? "after" : "before",
             Complaint = IsAfter ? "" : Complaint.Trim(),
             WorkDone = IsAfter ? WorkDone.Trim() : "",
+            WorkItems = IsAfter ? Checklist.Ticked : [],
         };
         Main.StartCheck(intake, IsAfter ? SelectedBefore : null, this);
     }

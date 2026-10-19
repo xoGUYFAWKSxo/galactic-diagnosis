@@ -1,5 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:GalacticDiagnosis.Gui">
     <!-- Every colour is a DynamicResource so switching Dark.xaml / Light.xaml restyles the open window. -->
 
     <Style TargetType="Button">
@@ -360,4 +361,24 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <local:VisibleWhen x:Key="ShowIf" />
+    <local:VisibleWhen x:Key="HideIf" Invert="True" />
+
+    <!-- Technician checklist: two columns of tick boxes, with a "Suggested" tag from the before check. -->
+    <DataTemplate x:Key="ChecklistEntryTemplate">
+        <CheckBox IsChecked="{Binding IsChecked}" Margin="0,5,16,5" AutomationProperties.Name="{Binding Text}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Text}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                <Border CornerRadius="8" BorderBrush="{DynamicResource Accent}" BorderThickness="1" Padding="6,0" Margin="8,0,0,0"
+                        VerticalAlignment="Center" Visibility="{Binding IsSuggested, Converter={StaticResource ShowIf}}"
+                        ToolTip="The before check found a problem this usually fixes.">
+                    <TextBlock Text="Suggested" FontSize="11" Foreground="{DynamicResource Accent}" />
+                </Border>
+            </StackPanel>
+        </CheckBox>
+    </DataTemplate>
+
+    <ItemsPanelTemplate x:Key="TwoColumns">
+        <UniformGrid Columns="2" />
+    </ItemsPanelTemplate>
 </ResourceDictionary>
