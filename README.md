@@ -60,13 +60,13 @@ The exe isn't code-signed, so Windows SmartScreen will warn the first time it ru
 Requires the .NET 8 SDK.
 
 ```
-dotnet publish src\GalacticDiagnosis.App -c Release -o publish
+dotnet publish src\GalacticDiagnosis.Console -c Release -o publish
 dotnet test
 ```
 
-This produces `publish\GalacticDiagnosis.exe` (about 34 MB, self-contained single file). The repo's `nuget.config` pins nuget.org as the package source.
+This produces `publish\GalacticDiagnosis-Console.exe` (about 34 MB, self-contained single file). The repo's `nuget.config` pins nuget.org as the package source.
 
-Layout: `GalacticDiagnosis.Core` (one collector per section, comparison logic), `GalacticDiagnosis.Report` (self-contained HTML, no scripts or external files), `GalacticDiagnosis.App` (console front end), `tests/`. Progress and design notes are in [STATUS.md](STATUS.md) and [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md).
+Layout: `GalacticDiagnosis.Core` (one collector per section, comparison logic), `GalacticDiagnosis.Report` (self-contained HTML, no scripts or external files), `GalacticDiagnosis.Console` (console front end, `GalacticDiagnosis-Console.exe`), `tests/`. Progress and design notes are in [STATUS.md](STATUS.md) and [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md).
 
 ## License
 

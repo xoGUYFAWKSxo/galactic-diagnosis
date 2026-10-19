@@ -9,6 +9,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\GalacticDiagnosis.Core\GalacticDiagnosis.Core.csproj" />
+    <ProjectReference Include="..\..\src\GalacticDiagnosis.Report\GalacticDiagnosis.Report.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />
