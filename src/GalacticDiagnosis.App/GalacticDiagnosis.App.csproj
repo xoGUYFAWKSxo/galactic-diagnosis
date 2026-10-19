@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <AssemblyName>PcDiagnostic</AssemblyName>
-    <RootNamespace>PcDiagnostic.App</RootNamespace>
+    <AssemblyName>GalacticDiagnosis</AssemblyName>
+    <RootNamespace>GalacticDiagnosis.App</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
@@ -12,7 +12,7 @@
     <DebugType>embedded</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PcDiagnostic.Core\PcDiagnostic.Core.csproj" />
-    <ProjectReference Include="..\PcDiagnostic.Report\PcDiagnostic.Report.csproj" />
+    <ProjectReference Include="..\GalacticDiagnosis.Core\GalacticDiagnosis.Core.csproj" />
+    <ProjectReference Include="..\GalacticDiagnosis.Report\GalacticDiagnosis.Report.csproj" />
   </ItemGroup>
 </Project>

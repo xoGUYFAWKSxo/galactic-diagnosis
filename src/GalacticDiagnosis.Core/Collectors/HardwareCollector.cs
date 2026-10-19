@@ -1,6 +1,6 @@
 using Microsoft.Win32;
 
-namespace PcDiagnostic.Core.Collectors;
+namespace GalacticDiagnosis.Core.Collectors;
 
 public sealed class HardwareCollector : ICollector
 {

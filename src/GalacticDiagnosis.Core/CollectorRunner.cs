@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Security.Principal;
 
-namespace PcDiagnostic.Core;
+namespace GalacticDiagnosis.Core;
 
 public static class CollectorRunner
 {

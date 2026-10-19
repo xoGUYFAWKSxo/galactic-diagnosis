@@ -1,4 +1,4 @@
-namespace PcDiagnostic.Core.Collectors;
+namespace GalacticDiagnosis.Core.Collectors;
 
 public sealed class DiskSpaceCollector : ICollector
 {

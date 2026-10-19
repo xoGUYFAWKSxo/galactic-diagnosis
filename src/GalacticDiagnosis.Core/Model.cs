@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace PcDiagnostic.Core;
+namespace GalacticDiagnosis.Core;
 
 [JsonConverter(typeof(JsonStringEnumConverter<Verdict>))]
 public enum Verdict

@@ -1,8 +1,8 @@
 using System.Net;
 using System.Text;
-using PcDiagnostic.Core;
+using GalacticDiagnosis.Core;
 
-namespace PcDiagnostic.Report;
+namespace GalacticDiagnosis.Report;
 
 /// <summary>Renders a run as one self-contained HTML file (inline CSS, no scripts, no external files). Print to PDF from any browser.</summary>
 public static class HtmlReport
@@ -75,7 +75,7 @@ public static class HtmlReport
         sb.Append($"""
             <footer>
               <p>Everything in this report was read from this computer's own Windows records. Nothing was sent over the internet.</p>
-              <p class="tech">PC Diagnostic Tool {E(run.ToolVersion)}{(run.RanAsAdmin ? "" : " · run without administrator rights, so some sections may be incomplete")}</p>
+              <p class="tech">Galactic Diagnosis {E(run.ToolVersion)}{(run.RanAsAdmin ? "" : " · run without administrator rights, so some sections may be incomplete")}</p>
             </footer>
             </main>
             </body>

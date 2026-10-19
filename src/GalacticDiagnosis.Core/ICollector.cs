@@ -1,4 +1,4 @@
-namespace PcDiagnostic.Core;
+namespace GalacticDiagnosis.Core;
 
 /// <summary>One report section. Implementations may throw; <see cref="CollectorRunner"/> turns failures into "couldn't read".</summary>
 public interface ICollector

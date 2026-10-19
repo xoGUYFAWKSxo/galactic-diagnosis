@@ -1,6 +1,6 @@
 using System.Management;
 
-namespace PcDiagnostic.Core;
+namespace GalacticDiagnosis.Core;
 
 /// <summary>Thin WMI helpers. Values vary a lot between machines, so every getter tolerates null and odd types.</summary>
 public static class Wmi

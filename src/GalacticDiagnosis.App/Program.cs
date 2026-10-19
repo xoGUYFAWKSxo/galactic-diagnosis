@@ -1,11 +1,11 @@
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
-using PcDiagnostic.Core;
-using PcDiagnostic.Core.Collectors;
-using PcDiagnostic.Report;
+using GalacticDiagnosis.Core;
+using GalacticDiagnosis.Core.Collectors;
+using GalacticDiagnosis.Report;
 
-namespace PcDiagnostic.App;
+namespace GalacticDiagnosis.App;
 
 static class Program
 {
@@ -29,7 +29,7 @@ static class Program
     static async Task<int> RunAsync(string[] args)
     {
         var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "dev";
-        Console.WriteLine($"PC Diagnostic Tool {version}\n");
+        Console.WriteLine($"Galactic Diagnosis {version}\n");
 
         var isAdmin = CollectorRunner.IsAdmin();
         if (!isAdmin)
