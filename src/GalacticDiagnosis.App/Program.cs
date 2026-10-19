@@ -43,6 +43,22 @@ static class Program
             return 0;
         }
 
+        // Rebuilds the HTML for a saved run, e.g. after a report wording change.
+        var renderAt = Array.IndexOf(args, "--render");
+        if (renderAt >= 0)
+        {
+            if (renderAt + 1 >= args.Length)
+            {
+                Console.WriteLine("Usage: GalacticDiagnosis --render <run.json>");
+                return 2;
+            }
+            var src = args[renderAt + 1];
+            var page = Path.ChangeExtension(Path.GetFullPath(src), ".html");
+            File.WriteAllText(page, HtmlReport.Render(RunFile.Load(src)));
+            Console.WriteLine($"Report saved:\n  {page}");
+            return 0;
+        }
+
         var isAdmin = CollectorRunner.IsAdmin();
         if (!isAdmin)
         {

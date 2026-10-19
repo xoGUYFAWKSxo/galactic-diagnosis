@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PC Health Report — Jordan Rivera</title>
+<style>:root{--ink:#1d2433;--muted:#5d6678;--line:#e3e6ec;--bg:#f6f7f9;--card:#fff;
+  --good:#1f7a4d;--good-bg:#e3f4ea;--warning:#8a5a00;--warning-bg:#fdf1d8;--bad:#b42318;--bad-bg:#fde7e5;
+  --unavailable:#596273;--unavailable-bg:#eceef2;--info:#3b5bab;--info-bg:#e7edfb}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif}
+main{max-width:860px;margin:0 auto;padding:32px 16px 48px}
+h1{font-size:26px;margin:0 0 12px}
+h2{font-size:18px;margin:0 0 8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+header,section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 22px;margin-bottom:16px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 32px;margin:0}
+.meta dt{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.meta dd{margin:0;font-weight:600}
+.complaint{margin:14px 0 0}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px;white-space:nowrap}
+.good{color:var(--good);background:var(--good-bg)} .warning{color:var(--warning);background:var(--warning-bg)}
+.bad{color:var(--bad);background:var(--bad-bg)} .unavailable{color:var(--unavailable);background:var(--unavailable-bg)}
+.info{color:var(--info);background:var(--info-bg)}
+.better{color:var(--good);background:var(--good-bg)} .worse{color:var(--bad);background:var(--bad-bg)} .same,.unknown{color:var(--unavailable);background:var(--unavailable-bg)}
+.glance ul{list-style:none;margin:0;padding:0}
+.glance li{display:grid;grid-template-columns:130px 1fr;gap:2px 12px;padding:10px 0;border-top:1px solid var(--line)}
+.glance li:first-child{border-top:0}
+.glance .pill{grid-row:span 2;align-self:start;justify-self:start}
+.glance a{color:var(--ink);font-weight:600;text-decoration:none}
+.glance .sum{color:var(--muted)}
+.summary{margin:0 0 12px}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;vertical-align:top;padding:7px 0;border-top:1px solid var(--line)}
+th{width:34%;font-weight:600;padding-right:16px}
+tr.sub th{font-weight:400;color:var(--muted);padding-left:16px}
+tr.sub th,tr.sub td{border-top:0;padding-top:2px;padding-bottom:2px;font-size:14px}
+td{overflow-wrap:anywhere}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:1px}
+.dot.good{background:var(--good)} .dot.warning{background:#d99100} .dot.bad{background:var(--bad)} .dot.unavailable{background:var(--unavailable)}
+.note{font-size:13px;color:var(--muted)}
+.tech{font-size:12px;color:var(--muted);margin:10px 0 0}
+footer{color:var(--muted);font-size:13px;padding:0 4px}
+@media (max-width:560px){.glance li{grid-template-columns:1fr}.glance .pill{grid-row:auto}th{width:42%}}
+@media print{body{background:#fff;font-size:12px}main{padding:0;max-width:none}
+  header,section{border:0;border-bottom:1px solid var(--line);border-radius:0;padding:12px 0;break-inside:avoid}
+  .pill,.dot{-webkit-print-color-adjust:exact;print-color-adjust:exact}a{color:inherit}}</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>PC Health Report — Jordan Rivera</h1>
+  <dl class="meta">
+    <div><dt>Date</dt><dd>October 18, 2026 8:35 PM</dd></div>
+    <div><dt>Computer</dt><dd>SAMPLE-PC</dd></div>
+    <div><dt>Check</dt><dd>After service</dd></div>
+  </dl><p class="complaint"><strong>Reported problem:</strong> Takes forever to start up and feels sluggish</p></header><section class="glance">
+  <h2>At a glance <span class="pill warning">Needs attention</span></h2>
+  <ul><li><span class="pill good">Good</span><a href="#hardware">Hardware</a><span class="sum">The hardware was identified and nothing stands out.</span></li><li><span class="pill warning">Needs attention</span><a href="#drive_health">Drive health</a><span class="sum">Drive D: (WDC WD1003FZEX-00K3CA0) has been powered on for 57,686 hours (about 6.6 years). Hard drives this old fail more often, so keep a backup.</span></li><li><span class="pill warning">Needs attention</span><a href="#crashes">Crashes</a><span class="sum">The program Variable_dump crashed 20 times. Reinstalling or updating it usually fixes this.</span></li><li><span class="pill good">Good</span><a href="#boot_time">Startup time</a><span class="sum">Windows took 37 seconds to start up last time, which is fine.</span></li><li><span class="pill good">Good</span><a href="#startup">Startup programs</a><span class="sum">7 programs start with Windows, which is a reasonable number, and nothing looks suspicious.</span></li><li><span class="pill good">Good</span><a href="#disk_space">Disk space</a><span class="sum">Every drive has plenty of free space.</span></li><li><span class="pill good">Good</span><a href="#updates">Windows updates</a><span class="sum">Windows is installing updates regularly.</span></li><li><span class="pill good">Good</span><a href="#antivirus">Antivirus</a><span class="sum">Windows Defender is on and up to date.</span></li><li><span class="pill good">Good</span><a href="#activation">Windows activation</a><span class="sum">Windows is activated.</span></li></ul></section><section class="detail" id="hardware">
+  <h2>Hardware <span class="pill good">Good</span></h2>
+  <p class="summary">The hardware was identified and nothing stands out.</p><table><tr><th>Windows</th><td>Microsoft Windows 11 Pro (64-bit, build 26300)</td></tr><tr><th>Last restart</th><td>2026-10-13 15:29 (5 days ago)</td></tr><tr><th>Computer</th><td>Gigabyte Technology Co., Ltd. X870E AORUS ELITE WIFI7</td></tr><tr><th>Processor</th><td>AMD Ryzen 9 9950X 16-Core Processor — 16 cores / 32 threads, 4.3 GHz base</td></tr><tr><th>Graphics</th><td>NVIDIA GeForce RTX 5070, 12 GB, driver 32.0.16.1742, dated 2026-09-29</td></tr><tr><th>Graphics</th><td>AMD Radeon(TM) Graphics, 2 GB, driver 32.0.21042.62, dated 2026-04-16</td></tr><tr><th>Memory</th><td>96 GB in 2 sticks, running at 6000 MT/s</td></tr><tr class="sub"><th>P0 CHANNEL A DIMM 1</th><td>48 GB Kingston KF560C32-48</td></tr><tr class="sub"><th>P0 CHANNEL B DIMM 1</th><td>48 GB Kingston KF560C32-48</td></tr><tr><th>BIOS</th><td>FB2d (2026-07-20)</td></tr></table></section><section class="detail" id="drive_health">
+  <h2>Drive health <span class="pill warning">Needs attention</span></h2>
+  <p class="summary">Drive D: (WDC WD1003FZEX-00K3CA0) has been powered on for 57,686 hours (about 6.6 years). Hard drives this old fail more often, so keep a backup.</p><table><tr><th>WDC WD1003FZEX-00K3CA0</th><td><span class="dot warning" title="Needs attention"></span>Hard drive, 1 TB — holds D:<div class="note">29 &#176;C &#183; 57,686 hours powered on</div></td></tr><tr><th>Samsung SSD 990 PRO 2TB</th><td><span class="dot good" title="Good"></span>NVMe SSD, 2 TB — holds C:<div class="note">0% of rated life used &#183; 45 &#176;C</div></td></tr><tr><th>Samsung SSD 990 EVO Plus 1TB</th><td><span class="dot good" title="Good"></span>NVMe SSD, 1 TB — holds E:<div class="note">0% of rated life used &#183; 47 &#176;C</div></td></tr><tr><th>WD_BLACK AN1500</th><td><span class="dot good" title="Good"></span>NVMe SSD, 1 TB — holds F:<div class="note">0% of rated life used &#183; 57 &#176;C</div></td></tr></table></section><section class="detail" id="crashes">
+  <h2>Crashes <span class="pill warning">Needs attention</span></h2>
+  <p class="summary">The program Variable_dump crashed 20 times. Reinstalling or updating it usually fixes this.</p><table><tr><th>Blue screens</th><td><span class="dot good" title="Good"></span>None</td></tr><tr><th>Unexpected shutdowns</th><td><span class="dot good" title="Good"></span>None</td></tr><tr><th>Program crashes</th><td><span class="dot warning" title="Needs attention"></span>27 across 5 programs</td></tr><tr class="sub"><th>Variable_dump.exe</th><td><span class="dot warning" title="Needs attention"></span>20 crashes</td></tr><tr class="sub"><th>GalaxyClient.exe</th><td>3 crashes</td></tr><tr class="sub"><th>ctfmon.exe</th><td>2 crashes</td></tr><tr class="sub"><th>HP.PSA.Win32AdapterServer.exe</th><td>1 crash</td></tr><tr class="sub"><th>REDlauncher.exe</th><td>1 crash</td></tr><tr><th>Crash dump files</th><td>None</td></tr></table></section><section class="detail" id="boot_time">
+  <h2>Startup time <span class="pill good">Good</span></h2>
+  <p class="summary">Windows took 37 seconds to start up last time, which is fine.</p><table><tr><th>Last startup</th><td><span class="dot good" title="Good"></span>37 seconds, on 2026-10-13<div class="note">25 s to the sign-in screen and desktop, then 11 s for startup programs to settle.</div></td></tr><tr><th>Typical startup</th><td>31 seconds (middle of the last 10 recorded)</td></tr></table></section><section class="detail" id="startup">
+  <h2>Startup programs <span class="pill good">Good</span></h2>
+  <p class="summary">7 programs start with Windows, which is a reasonable number, and nothing looks suspicious.</p><table><tr><th>Corsair iCUE5 Software</th><td>Signed by Corsair Memory, Inc.<div class="note">C:\Program Files\Corsair\Corsair iCUE5 Software\iCUE Launcher.exe</div></td></tr><tr><th>electron.app.Bitwarden</th><td>Signed by Bitwarden Inc.<div class="note">C:\Users\Jordan\AppData\Local\Programs\Bitwarden\Bitwarden.exe</div></td></tr><tr><th>EpicGamesLauncher</th><td>Signed by Epic Games Inc.<div class="note">C:\Program Files\Epic Games\Launcher\Portal\Binaries\Win64\EpicGamesLauncher.exe</div></td></tr><tr><th>LGHUB</th><td>Signed by Logitech Inc<div class="note">C:\Program Files\LGHUB\system_tray\lghub_system_tray.exe</div></td></tr><tr><th>RtkAudUService</th><td>Part of Windows or a device driver<div class="note">C:\WINDOWS\System32\DriverStore\FileRepository\realtekservice.inf_amd64_9873da36e3c839c5\RtkAudUService64.exe</div></td></tr><tr><th>SecurityHealth</th><td>Part of Windows or a device driver<div class="note">C:\WINDOWS\system32\SecurityHealthSystray.exe</div></td></tr><tr><th>Steam</th><td>Signed by Valve Corp.<div class="note">C:\Program Files (x86)\Steam\steam.exe</div></td></tr><tr><th>Turned off</th><td>8 more startup entries are already switched off</td></tr></table></section><section class="detail" id="disk_space">
+  <h2>Disk space <span class="pill good">Good</span></h2>
+  <p class="summary">Every drive has plenty of free space.</p><table><tr><th>C: — Windows</th><td><span class="dot good" title="Good"></span>1510 GB free of 1862 GB (81% free)</td></tr><tr><th>D: (WDBlackHDD)</th><td><span class="dot good" title="Good"></span>904 GB free of 932 GB (97% free)</td></tr><tr><th>E: (EVOPLUS)</th><td><span class="dot good" title="Good"></span>807 GB free of 932 GB (87% free)</td></tr><tr><th>F: (AN1500)</th><td><span class="dot good" title="Good"></span>690 GB free of 931 GB (74% free)</td></tr></table></section><section class="detail" id="updates">
+  <h2>Windows updates <span class="pill good">Good</span></h2>
+  <p class="summary">Windows is installing updates regularly.</p><table><tr><th>Windows version</th><td>26H2, build 26300.9711</td></tr><tr><th>Last update installed</th><td><span class="dot good" title="Good"></span>2026-10-13 (5 days ago), KB5127694<div class="note">Update</div></td></tr><tr><th>Updates listed</th><td>6</td></tr></table></section><section class="detail" id="antivirus">
+  <h2>Antivirus <span class="pill good">Good</span></h2>
+  <p class="summary">Windows Defender is on and up to date.</p><table><tr><th>Windows Defender</th><td><span class="dot good" title="Good"></span>On, up to date</td></tr></table></section><section class="detail" id="activation">
+  <h2>Windows activation <span class="pill good">Good</span></h2>
+  <p class="summary">Windows is activated.</p><table><tr><th>Status</th><td><span class="dot good" title="Good"></span>Activated</td></tr><tr><th>Edition</th><td>Windows Professional</td></tr><tr><th>License type</th><td>Retail (bought separately)</td></tr></table></section><footer>
+  <p>Everything in this report was read from this computer's own Windows records. Nothing was sent over the internet.</p>
+  <p class="tech">Galactic Diagnosis 0.1.0</p>
+</footer>
+</main>
+</body>
+</html>
