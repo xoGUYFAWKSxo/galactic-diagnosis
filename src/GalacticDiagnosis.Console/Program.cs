@@ -88,7 +88,7 @@ static class Program
         return 0;
     }
 
-    /// <summary>Prompts for intake, or takes it from --name / --complaint / --work / --after for scripted runs.</summary>
+    /// <summary>Prompts for intake, or takes it from --name / --complaint / --work / --after (plus optional --job / --tech) for scripted runs.</summary>
     static Intake ReadIntake(string[] args)
     {
         var intake = new Intake
@@ -96,6 +96,8 @@ static class Program
             CustomerName = Arg(args, "--name") ?? "",
             Complaint = Arg(args, "--complaint") ?? "",
             WorkDone = Arg(args, "--work") ?? "",
+            JobNumber = Arg(args, "--job") ?? "",
+            TechnicianName = Arg(args, "--tech") ?? "",
             RunType = args.Contains("--after") ? "after" : "before",
         };
         if (args.Contains("--no-prompt")) return intake;

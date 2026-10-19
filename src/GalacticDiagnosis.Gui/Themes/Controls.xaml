@@ -130,6 +130,98 @@
         </Setter>
     </Style>
 
+    <!-- A vertical list of selectable cards (before checks to compare with, history). -->
+    <Style x:Key="PickList" TargetType="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource Ink}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Foreground" Value="{DynamicResource Ink}" />
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border x:Name="Bd" Background="{DynamicResource PanelAlt}" BorderBrush="Transparent" BorderThickness="1.5"
+                                        CornerRadius="8" Padding="12,8" Margin="0,0,0,6">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Line}" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Accent}" />
+                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Selection}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Verdict colour for a dot (Ellipse) bound to an item with a Verdict property. -->
+    <Style x:Key="VerdictDot" TargetType="Ellipse">
+        <Setter Property="Width" Value="10" />
+        <Setter Property="Height" Value="10" />
+        <Setter Property="Fill" Value="{DynamicResource Info}" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Verdict}" Value="Good"><Setter Property="Fill" Value="{DynamicResource Good}" /></DataTrigger>
+            <DataTrigger Binding="{Binding Verdict}" Value="Warning"><Setter Property="Fill" Value="{DynamicResource Warning}" /></DataTrigger>
+            <DataTrigger Binding="{Binding Verdict}" Value="Bad"><Setter Property="Fill" Value="{DynamicResource Bad}" /></DataTrigger>
+            <DataTrigger Binding="{Binding Verdict}" Value="Unavailable"><Setter Property="Fill" Value="{DynamicResource Unavailable}" /></DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="VerdictText" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource Info}" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Verdict}" Value="Good"><Setter Property="Foreground" Value="{DynamicResource Good}" /></DataTrigger>
+            <DataTrigger Binding="{Binding Verdict}" Value="Warning"><Setter Property="Foreground" Value="{DynamicResource Warning}" /></DataTrigger>
+            <DataTrigger Binding="{Binding Verdict}" Value="Bad"><Setter Property="Foreground" Value="{DynamicResource Bad}" /></DataTrigger>
+            <DataTrigger Binding="{Binding Verdict}" Value="Unavailable"><Setter Property="Foreground" Value="{DynamicResource Unavailable}" /></DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Small rotating arc for work in progress. -->
+    <Style x:Key="Spinner" TargetType="Path">
+        <Setter Property="Width" Value="14" />
+        <Setter Property="Height" Value="14" />
+        <Setter Property="Stretch" Value="Uniform" />
+        <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+        <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="StrokeStartLineCap" Value="Round" />
+        <Setter Property="StrokeEndLineCap" Value="Round" />
+        <Setter Property="Data" Value="M 7,1 A 6,6 0 1 1 1,7" />
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <RotateTransform />
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsVisible" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Angle" From="0" To="360"
+                                             Duration="0:0:0.9" RepeatBehavior="Forever" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style TargetType="TextBox">
         <Setter Property="Foreground" Value="{DynamicResource Ink}" />
         <Setter Property="Background" Value="{DynamicResource PanelAlt}" />
