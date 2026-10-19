@@ -35,8 +35,16 @@ Plan: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md)
 - An after run auto-finds the latest before run from the same PC in `Reports` (preferring the same customer name) and writes `<Name>_<date>_comparison.html`. Manual: `GalacticDiagnosis --compare before.json after.json`.
 - 43 tests. Verified the auto-compare on a real before/after pair, and checked the rendered page with a doctored "slow PC" before file.
 
-## Next — Phase 5 (polish)
-README with a sample-report screenshot, then a GitHub release with the exe attached. The MIT license is already in.
+## Done — Phase 5 (polish), 2026-10-18
+- README: screenshots (`docs/images/`), a what-it-checks table, usage, SmartScreen note and build steps.
+- Anonymised sample pages in `docs/sample/` (machine "SAMPLE-PC", customer "Jordan Rivera"; dev-PC hardware and startup data, with illustrative "before" numbers).
+- `--render <run.json>` rebuilds a report from its data.
+- Published single-file exe (33.8 MB) verified elevated on the dev PC: all 10 sections read.
+- Screenshots were made with headless Edge (`--headless=new --screenshot --force-device-scale-factor=2`), then the empty page background was cropped off.
+
+## Still untested
+- Battery on a real laptop, a SATA SSD, and a PC with recent blue screens (see the plan's testing checklist).
+- Verdict wording with a non-technical reader.
 
 ## Build / run
 - Publish: `dotnet publish src\GalacticDiagnosis.App -c Release -o publish` → `publish\GalacticDiagnosis.exe` (~34 MB, self-contained, single file).
