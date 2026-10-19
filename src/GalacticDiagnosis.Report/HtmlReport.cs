@@ -136,6 +136,9 @@ public static class HtmlReport
         .tech{font-size:12px;color:var(--muted);margin:10px 0 0}
         footer{color:var(--muted);font-size:13px;padding:0 4px}
         @media (max-width:560px){.glance li{grid-template-columns:1fr}.glance .pill{grid-row:auto}th{width:42%}}
+        @media screen and (prefers-color-scheme:dark){:root{color-scheme:dark;--ink:#ecf2fc;--muted:#8c9cb8;--line:#26305a;--bg:#0c1028;--card:#121a3a;
+          --good:#5fd49a;--good-bg:#123d2c;--warning:#ffc552;--warning-bg:#3d3011;--bad:#ff7a8e;--bad-bg:#45182a;
+          --unavailable:#a3adc2;--unavailable-bg:#232b48;--info:#8fb0ff;--info-bg:#1b2a55}}
         @media print{body{background:#fff;font-size:12px}main{padding:0;max-width:none}
           header,section{border:0;border-bottom:1px solid var(--line);border-radius:0;padding:12px 0;break-inside:avoid}
           .pill,.dot{-webkit-print-color-adjust:exact;print-color-adjust:exact}a{color:inherit}}

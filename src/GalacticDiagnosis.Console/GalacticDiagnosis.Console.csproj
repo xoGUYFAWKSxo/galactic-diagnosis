@@ -4,6 +4,7 @@
     <AssemblyName>GalacticDiagnosis-Console</AssemblyName>
     <RootNamespace>GalacticDiagnosis.Cli</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\..\assets\icon.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>

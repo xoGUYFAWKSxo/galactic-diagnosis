@@ -8,6 +8,28 @@ Plans: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md) (Phases 1–5, the console tool)
 - `CollectorRunner.RunAllAsync` takes a `CancellationToken` for the GUI's Cancel button.
 - 58 tests. Console before → after output is unchanged (same file names, comparison written).
 
+## Done — Phase 7 (icon, themes, report viewer), 2026-10-18
+- Icon: `assets/make_icon.py` (Pillow + NumPy) draws the Galactic Studio galaxy (`galaxy.py`, copied unchanged from Galactic Macro) with a crossed wrench and screwdriver in the bottom-right. It writes `icon.png`, `icon.ico` and `docs/social-preview.png`, and is used by both exes.
+- `src/GalacticDiagnosis.Gui` (WPF, `GalacticDiagnosis.exe`, `requireAdministrator`):
+  - A header with the icon, machine name, admin badge, Open report (Ctrl+O) and a dark/light toggle.
+  - The report viewer: Report and Before vs after tabs, Open in browser, Show in folder.
+  - Opening a `.json` re-renders it. An after run also loads its saved `_comparison.html`.
+  - Dark and light themes (`Themes/Dark.xaml`, `Themes/Light.xaml`) with a matching title bar. The report HTML has a screen-only dark block; print is always light.
+  - Settings (theme, window size) are saved in `GalacticDiagnosis.settings.json` next to the exe.
+- WebView2:
+  - Data goes to `%TEMP%\GalacticDiagnosis.WebView2`, deleted on exit.
+  - Reports load with `NavigateToString`. Any other navigation, new window or web request is refused.
+  - Dev tools, context menu, autofill and SmartScreen are off, and crash dumps stay local.
+  - Opening in the browser or folder goes through `explorer.exe`, so those windows aren't elevated.
+- No-WebView2 fallback: shows a banner and opens the page in the default browser. Test it with the hidden `--no-webview2` switch.
+- **Network check** (TCP connections of the app and its WebView2 processes, sampled while viewing):
+  - The app process: none.
+  - The WebView2 network service: secure-DNS lookups to Cloudflare, removed by the dead proxy (`--proxy-server=127.0.0.1:9`) and `--host-resolver-rules=MAP * ~NOTFOUND`.
+  - The WebView2 browser process: one HTTPS connection to 52.96.x.x, which is in the same range as `substrate.office.com` (Microsoft 365). It still happens with those switches, with every guessed Edge feature flag turned off, and with custom crash reporting. It's the runtime's own traffic and can't be configured from the app. No report data can reach it.
+  - The console exe makes no connections.
+- Published single file (tested with an as-invoker manifest so no UAC was needed): **64.5 MB**. WebView2 starts from it.
+- Dev run without UAC: `dotnet src\GalacticDiagnosis.Gui\bin\Release\net8.0-windows\win-x64\GalacticDiagnosis.dll [run.json]`.
+
 ## Done — Phase 1 (skeleton), 2026-10-18
 - Solution `GalacticDiagnosis.sln`: `src/GalacticDiagnosis.Core` (collectors, model, WMI helpers), `src/GalacticDiagnosis.Report` (HTML), `src/GalacticDiagnosis.Console` (console, `GalacticDiagnosis-Console.exe`, `requireAdministrator` manifest).
 - `ICollector` + `CollectorRunner`: parallel, per-collector timeout and try/catch → "Couldn't check" instead of a crash.

@@ -1,0 +1,54 @@
+<UserControl x:Class="GalacticDiagnosis.Gui.Views.ReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+             xmlns:local="clr-namespace:GalacticDiagnosis.Gui">
+    <UserControl.Resources>
+        <local:VisibleWhen x:Key="Visible" />
+        <local:VisibleWhen x:Key="Hidden" Invert="True" />
+        <Style x:Key="IconText" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe Fluent Icons, Segoe MDL2 Assets" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,8,0" />
+        </Style>
+    </UserControl.Resources>
+    <DockPanel>
+        <!-- Toolbar: page tabs on the left, actions on the right. -->
+        <Border DockPanel.Dock="Top" Padding="18,12,18,10">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" FontSize="16" FontWeight="SemiBold" Margin="2,0,0,10" />
+                <ListBox DockPanel.Dock="Left" Style="{StaticResource SegmentList}" ItemsSource="{Binding Tabs}"
+                         SelectedItem="{Binding Selected}" DisplayMemberPath="Header" AutomationProperties.Name="Report pages" />
+                <StackPanel x:Name="Actions" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Command="{Binding OpenInBrowserCommand}" Margin="8,0,0,0" ToolTip="Open this page in the web browser">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE774;" Style="{StaticResource IconText}" />
+                            <TextBlock Text="Open in browser" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding ShowInFolderCommand}" Margin="8,0,0,0" ToolTip="Show the saved files in Explorer">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE838;" Style="{StaticResource IconText}" />
+                            <TextBlock Text="Show in folder" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- No WebView2 runtime: the report opens in the browser instead. -->
+        <Border DockPanel.Dock="Top" Style="{StaticResource Card}" Margin="18,0,18,12"
+                Visibility="{Binding WebViewMissing, Converter={StaticResource Visible}}">
+            <StackPanel>
+                <TextBlock Text="This report opened in your web browser" FontWeight="SemiBold" />
+                <TextBlock Style="{StaticResource MutedText}" Margin="0,4,0,0"
+                           Text="This PC doesn't have the Microsoft Edge WebView2 runtime, which shows reports inside this window. Nothing is missing from the report itself; use Open in browser to show it again." />
+            </StackPanel>
+        </Border>
+
+        <Border Margin="18,0,18,18" CornerRadius="10" BorderThickness="1" BorderBrush="{DynamicResource Line}" ClipToBounds="True"
+                Visibility="{Binding WebViewMissing, Converter={StaticResource Hidden}}">
+            <wv2:WebView2 x:Name="Web" AutomationProperties.Name="Report" />
+        </Border>
+    </DockPanel>
+</UserControl>
