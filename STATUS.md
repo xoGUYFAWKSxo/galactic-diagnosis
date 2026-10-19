@@ -87,7 +87,14 @@ Plans: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md) (Phases 1–5, the console tool)
 - Console `--summary <run.json>` writes the one-page customer summary. Its usage text now names `GalacticDiagnosis-Console`.
 - Sample data: `sample-after.json` gained `work_items`, a job number, a technician and `compared_with`. The sample pages were re-rendered, and `docs/sample/sample-summary.html` was added.
 - README rewritten for the app: GUI screenshots in both themes (`docs/images/gui-*.png`, from `--demo` with sample data only), the two exes, keyboard, an honest note on network use, and build steps.
-- **Release v0.2.0 (not yet done):** merge PRs #7 to #12 in order, publish both exes from main, and attach them with their SHA-256 hashes.
+- **Released v0.2.0**, 2026-10-18: PRs #7 to #12 merged in order, both exes published from main (GUI 64.6 MB, console 34.1 MB) and attached with their SHA-256 hashes.
+
+## Done — Elevated GUI test (v0.2.0 release exe), 2026-10-18
+- Ran the released `GalacticDiagnosis.exe` as administrator on the dev PC, driven by UI Automation from an elevated PowerShell. UIPI blocks an unelevated script from driving an elevated window.
+- The header shows the Administrator badge. All 10 sections ran as admin, with startup time and drive power-on hours readable. A whole check takes about a second here.
+- **Cancel**, pressed straight after Start, returned to the form in 0.2 s and saved nothing.
+- **Before → after** with job J2001: the after form picked the before check, marked the checklist *Suggested* tags from its findings, and opened on Before vs after. It wrote `User_J2001_2026-10-18_before`, `_after` and `_comparison`. Customer summary and History also worked.
+- The test files stayed outside the repo.
 
 ## Done — Phase 1 (skeleton), 2026-10-18
 - Solution `GalacticDiagnosis.sln`: `src/GalacticDiagnosis.Core` (collectors, model, WMI helpers), `src/GalacticDiagnosis.Report` (HTML), `src/GalacticDiagnosis.Console` (console, `GalacticDiagnosis-Console.exe`, `requireAdministrator` manifest).
@@ -133,13 +140,11 @@ Plans: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md) (Phases 1–5, the console tool)
 ## Still untested
 - Battery on a real laptop, a SATA SSD, and a PC with recent blue screens (see the plan's testing checklist).
 - Verdict wording with a non-technical reader.
-- The GUI run elevated (every GUI test so far ran the dll unelevated through `dotnet`), and cancelling a real elevated check by hand.
 - Fix-it shortcuts other than Reliability history, the battery report on a laptop, and "Leave a copy" when elevated with a different admin account.
 - High-DPI scaling (125%/150%) and an older Windows 10 PC without WebView2 (the fallback was only simulated with `--no-webview2`).
 
 ## Build / run
 - Publish: `dotnet publish src\GalacticDiagnosis.Gui -c Release -o publish` → `publish\GalacticDiagnosis.exe` (~65 MB), and `dotnet publish src\GalacticDiagnosis.Console -c Release -o publish` → `publish\GalacticDiagnosis-Console.exe` (~34 MB). Both are self-contained single files.
-- GUI dev run without UAC: `dotnet src\GalacticDiagnosis.Guiin\Release
-et8.0-windows\win-x64\GalacticDiagnosis.dll [run.json] [--demo] [--no-webview2]`.
+- GUI dev run without UAC: `dotnet src\GalacticDiagnosis.Gui\bin\Release\net8.0-windows\win-x64\GalacticDiagnosis.dll [run.json] [--demo] [--no-webview2]`.
 - Dev run without UAC: `dotnet src\GalacticDiagnosis.Console\bin\Release\net8.0-windows\win-x64\GalacticDiagnosis-Console.dll --no-prompt --name "Test User"` (running the dll through `dotnet` skips the admin manifest).
 - `nuget.config` is required: the machine's global NuGet config has no package sources.
