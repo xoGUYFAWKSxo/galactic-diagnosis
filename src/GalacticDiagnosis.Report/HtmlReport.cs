@@ -85,11 +85,11 @@ public static class HtmlReport
         return sb.ToString();
     }
 
-    static string E(string? s) => WebUtility.HtmlEncode(s ?? "");
+    internal static string E(string? s) => WebUtility.HtmlEncode(s ?? "");
 
-    static string Cls(Verdict v) => v.ToString().ToLowerInvariant();
+    internal static string Cls(Verdict v) => v.ToString().ToLowerInvariant();
 
-    static string Label(Verdict v) => v switch
+    internal static string Label(Verdict v) => v switch
     {
         Verdict.Good => "Good",
         Verdict.Warning => "Needs attention",
@@ -98,7 +98,7 @@ public static class HtmlReport
         _ => "Info",
     };
 
-    const string Css = """
+    internal const string Css = """
         :root{--ink:#1d2433;--muted:#5d6678;--line:#e3e6ec;--bg:#f6f7f9;--card:#fff;
           --good:#1f7a4d;--good-bg:#e3f4ea;--warning:#8a5a00;--warning-bg:#fdf1d8;--bad:#b42318;--bad-bg:#fde7e5;
           --unavailable:#596273;--unavailable-bg:#eceef2;--info:#3b5bab;--info-bg:#e7edfb}
@@ -116,6 +116,7 @@ public static class HtmlReport
         .good{color:var(--good);background:var(--good-bg)} .warning{color:var(--warning);background:var(--warning-bg)}
         .bad{color:var(--bad);background:var(--bad-bg)} .unavailable{color:var(--unavailable);background:var(--unavailable-bg)}
         .info{color:var(--info);background:var(--info-bg)}
+        .better{color:var(--good);background:var(--good-bg)} .worse{color:var(--bad);background:var(--bad-bg)} .same,.unknown{color:var(--unavailable);background:var(--unavailable-bg)}
         .glance ul{list-style:none;margin:0;padding:0}
         .glance li{display:grid;grid-template-columns:130px 1fr;gap:2px 12px;padding:10px 0;border-top:1px solid var(--line)}
         .glance li:first-child{border-top:0}
