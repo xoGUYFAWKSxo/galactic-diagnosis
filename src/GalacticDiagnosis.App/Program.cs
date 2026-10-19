@@ -42,13 +42,18 @@ static class Program
 
         var intake = ReadIntake(args);
 
-        ICollector[] collectors = [new HardwareCollector(), new DriveHealthCollector(), new BatteryCollector(), new CrashCollector(), new DiskSpaceCollector()];
+        ICollector[] collectors =
+        [
+            new HardwareCollector(), new DriveHealthCollector(), new BatteryCollector(), new CrashCollector(),
+            new BootTimeCollector(), new StartupCollector(), new DiskSpaceCollector(),
+            new UpdatesCollector(), new AntivirusCollector(), new ActivationCollector(),
+        ];
         Console.WriteLine($"\nChecking {collectors.Length} areas...");
         var startedAt = DateTimeOffset.Now;
         var sections = await CollectorRunner.RunAllAsync(collectors, isAdmin, s =>
         {
             lock (Console.Out)
-                Console.WriteLine($"  {s.Title,-14} {s.Verdict,-12} {s.ElapsedMs,6:0} ms");
+                Console.WriteLine($"  {s.Title,-20} {s.Verdict,-12} {s.ElapsedMs,6:0} ms");
         });
 
         var run = new DiagnosticRun

@@ -18,8 +18,17 @@ Plan: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md)
 - WMI gotcha: `SELECT * FROM MSFT_StorageReliabilityCounter` returns nothing even as admin. Counters only come through each disk's association (`ManagementObject.GetRelated`), and without admin that returns empty instead of throwing.
 - Samsung NVMe drives here report no PowerOnHours or error counts through this API; only temperature and wear.
 
-## Next — Phase 3 (cleanup data)
-Boot time (Diagnostics-Performance event 100), startup programs (Run keys + Startup folders, flag unsigned / Temp / AppData), activation (`SoftwareLicensingProduct`, slow), updates (`Win32_QuickFixEngineering`), antivirus (`root\SecurityCenter2`).
+## Done — Phase 3 (cleanup data), 2026-10-18
+- Startup time: Diagnostics-Performance event 100 (admin only), with fields read by name. Reports the last boot plus the median of the last 10 (90 days). Under 60 s is good, under 120 s needs attention, over that is a problem.
+- Startup programs: HKLM/HKLM-32/HKCU Run keys + both Startup folders (.lnk resolved). Honours `Explorer\StartupApproved`, where an odd first byte means turned off in Task Manager. Embedded Authenticode check via WinVerifyTrust with no revocation/network. Flags unsigned (with AppData context) and anything in Temp. Files under %WINDIR% are treated as Windows/driver components, because they're catalog-signed. 12 or more enabled triggers a warning.
+- Windows updates: newest `Win32_QuickFixEngineering` date (45/90-day thresholds), version/build from the registry, pending-restart keys.
+- Antivirus: `root\SecurityCenter2` productState decode; flags none on, out-of-date definitions, or two AVs running at once.
+- Activation: `SoftwareLicensingProduct` filtered to Windows with an installed key (~0.4–0.6 s here), plus edition and channel.
+- 37 tests total.
+- Verified elevated and unelevated on the dev PC. Elevated: last boot 37 s, median 31 s, with all 10 sections readable. Unelevated, startup time correctly shows "run as administrator".
+
+## Next — Phase 4 (intake and comparison)
+Intake prompts and JSON already exist. Still to do: a comparison report that reads two JSON files and shows changes like "Boot time: 94s → 22s" (metrics keys are in each section's `metrics`).
 
 ## Build / run
 - Publish: `dotnet publish src\GalacticDiagnosis.App -c Release -o publish` → `publish\GalacticDiagnosis.exe` (~34 MB, self-contained, single file).
