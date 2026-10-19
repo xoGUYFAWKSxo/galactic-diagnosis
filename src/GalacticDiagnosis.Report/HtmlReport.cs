@@ -33,10 +33,12 @@ public static class HtmlReport
                 <div><dt>Date</dt><dd>{run.StartedAt:MMMM d, yyyy h:mm tt}</dd></div>
                 <div><dt>Computer</dt><dd>{E(run.MachineName)}</dd></div>
                 <div><dt>Check</dt><dd>{(run.Intake.RunType == "after" ? "After service" : "Before service")}</dd></div>
-              </dl>
+              {ShopMeta(run.Intake)}</dl>
             """);
         if (!string.IsNullOrWhiteSpace(run.Intake.Complaint))
             sb.Append($"""<p class="complaint"><strong>Reported problem:</strong> {E(run.Intake.Complaint)}</p>""");
+        if (run.Intake.RunType == "after" && !string.IsNullOrWhiteSpace(run.Intake.WorkDone))
+            sb.Append($"""<p class="complaint"><strong>Work done:</strong> {E(run.Intake.WorkDone)}</p>""");
         sb.Append("</header>");
 
         sb.Append($"""
@@ -87,9 +89,20 @@ public static class HtmlReport
 
     internal static string E(string? s) => WebUtility.HtmlEncode(s ?? "");
 
+    /// <summary>Job number and "Checked by" header entries, when given.</summary>
+    internal static string ShopMeta(Intake intake)
+    {
+        var sb = new StringBuilder();
+        if (!string.IsNullOrWhiteSpace(intake.JobNumber))
+            sb.Append($"""<div><dt>Job</dt><dd>{E(intake.JobNumber)}</dd></div>""");
+        if (!string.IsNullOrWhiteSpace(intake.TechnicianName))
+            sb.Append($"""<div><dt>Checked by</dt><dd>{E(intake.TechnicianName)}</dd></div>""");
+        return sb.ToString();
+    }
+
     internal static string Cls(Verdict v) => v.ToString().ToLowerInvariant();
 
-    internal static string Label(Verdict v) => v switch
+    public static string Label(Verdict v) => v switch
     {
         Verdict.Good => "Good",
         Verdict.Warning => "Needs attention",

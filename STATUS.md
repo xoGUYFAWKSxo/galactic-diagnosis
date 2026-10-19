@@ -30,6 +30,16 @@ Plans: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md) (Phases 1–5, the console tool)
 - Published single file (tested with an as-invoker manifest so no UAC was needed): **64.5 MB**. WebView2 starts from it.
 - Dev run without UAC: `dotnet src\GalacticDiagnosis.Gui\bin\Release\net8.0-windows\win-x64\GalacticDiagnosis.dll [run.json]`.
 
+## Done — Phase 8 (check flow), 2026-10-18
+- **New check** is the start page. It has customer name, job number, Checked by (remembered in the settings file), Before/After, and the complaint (before) or what was done (after).
+  - An after check lists this PC's before checks and pre-selects the console's pick (latest, preferring the same customer). The technician can pick another or *Don't compare*.
+- **Running:** one row per check, with a spinner until it reports, then a verdict dot, label, summary and time. There's a progress bar and Cancel. New check and Open report are disabled while a check runs. Cancel returns to the filled-in form with "Nothing was saved".
+- The finished run opens in the report viewer, on the comparison tab for an after run.
+- Model: `Intake.JobNumber` and `Intake.TechnicianName` print in both report headers as Job and Checked by. The job number goes in file names (`Smith_J1042_2026-10-18_before`). `DiagnosticRun.ComparedWith` records the before file. An after report now shows Work done.
+- The console gains `--job` and `--tech`.
+- 63 tests, including the `CollectorRunner` order, timeout and cancel tests.
+- Tested via UI Automation (unelevated dev run): before → after through the GUI wrote `User_J1042_2026-10-18_before`, `User_2026-10-18_after` and `_comparison`, which are the console's names. **Not yet tested:** a GUI check elevated (needs UAC), and Cancel by hand (an unelevated run finishes in about a second; covered by a unit test).
+
 ## Done — Phase 1 (skeleton), 2026-10-18
 - Solution `GalacticDiagnosis.sln`: `src/GalacticDiagnosis.Core` (collectors, model, WMI helpers), `src/GalacticDiagnosis.Report` (HTML), `src/GalacticDiagnosis.Console` (console, `GalacticDiagnosis-Console.exe`, `requireAdministrator` manifest).
 - `ICollector` + `CollectorRunner`: parallel, per-collector timeout and try/catch → "Couldn't check" instead of a crash.

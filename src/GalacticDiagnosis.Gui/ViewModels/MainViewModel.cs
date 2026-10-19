@@ -15,7 +15,7 @@ public sealed partial class MainViewModel : ObservableObject
     {
         Settings = settings;
         isDark = ThemeManager.IsDark;
-        page = new HomeViewModel(this);
+        page = new NewCheckViewModel(this);
     }
 
     public AppSettings Settings { get; }
@@ -34,6 +34,11 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string? error;
 
+    /// <summary>True while a check runs; navigation waits until it finishes or is cancelled.</summary>
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(NewCheckCommand), nameof(OpenReportCommand))]
+    private bool isBusy;
+
     partial void OnIsDarkChanged(bool value)
     {
         ThemeManager.Apply(value);
@@ -43,13 +48,15 @@ public sealed partial class MainViewModel : ObservableObject
 
     partial void OnPageChanged(object value) => Error = null;
 
+    bool CanNavigate() => !IsBusy;
+
     [RelayCommand]
     private void ToggleTheme() => IsDark = !IsDark;
 
-    [RelayCommand]
-    private void GoHome() => Page = new HomeViewModel(this);
+    [RelayCommand(CanExecute = nameof(CanNavigate))]
+    private void NewCheck() => Page = new NewCheckViewModel(this);
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanNavigate))]
     private void OpenReport()
     {
         var dlg = new OpenFileDialog
@@ -78,5 +85,13 @@ public sealed partial class MainViewModel : ObservableObject
         Page = report;
         // No WebView2 on this PC: the browser is the viewer.
         if (!WebViewHost.Available) report.OpenInBrowserCommand.Execute(null);
+    }
+
+    public void StartCheck(Intake intake, SavedRun? before, NewCheckViewModel form)
+    {
+        var running = new RunningViewModel(this, intake, before, form);
+        IsBusy = true;
+        Page = running;
+        _ = running.RunAsync();
     }
 }

@@ -12,11 +12,13 @@
     <Window.Resources>
         <local:VisibleWhen x:Key="Visible" />
         <local:VisibleWhen x:Key="Hidden" Invert="True" />
-        <DataTemplate DataType="{x:Type vm:HomeViewModel}"><v:HomeView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:NewCheckViewModel}"><v:NewCheckView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:RunningViewModel}"><v:RunningView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:ReportViewModel}"><v:ReportView /></DataTemplate>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding OpenReportCommand}" />
+        <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewCheckCommand}" />
     </Window.InputBindings>
 
     <DockPanel>
@@ -24,8 +26,8 @@
         <Border DockPanel.Dock="Top" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Line}" BorderThickness="0,0,0,1"
                 Padding="16,10">
             <DockPanel>
-                <Button DockPanel.Dock="Left" Style="{StaticResource QuietButton}" Padding="4" Command="{Binding GoHomeCommand}"
-                        ToolTip="Start page" AutomationProperties.Name="Start page">
+                <Button DockPanel.Dock="Left" Style="{StaticResource QuietButton}" Padding="4" Command="{Binding NewCheckCommand}"
+                        ToolTip="New check" AutomationProperties.Name="Home">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Assets/icon.png" Width="34" Height="34" RenderOptions.BitmapScalingMode="HighQuality" />
                         <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
@@ -53,6 +55,12 @@
                             ToolTip="Drive health, startup time and some event logs need administrator rights.">
                         <TextBlock Text="Not administrator" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Alert}" />
                     </Border>
+                    <Button Style="{StaticResource QuietButton}" Command="{Binding NewCheckCommand}" ToolTip="Start a new check (Ctrl+N)">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE710;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <TextBlock Text="New check" />
+                        </StackPanel>
+                    </Button>
                     <Button Style="{StaticResource QuietButton}" Command="{Binding OpenReportCommand}" ToolTip="Open a saved report (Ctrl+O)">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8E5;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" VerticalAlignment="Center" Margin="0,0,8,0" />

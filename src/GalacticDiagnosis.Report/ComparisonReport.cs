@@ -31,7 +31,7 @@ public static class ComparisonReport
                 <div><dt>Before</dt><dd>{c.Before.StartedAt:MMMM d, yyyy}</dd></div>
                 <div><dt>After</dt><dd>{c.After.StartedAt:MMMM d, yyyy}</dd></div>
                 <div><dt>Computer</dt><dd>{E(c.After.MachineName)}</dd></div>
-              </dl>
+              {ShopMeta(c.After.Intake)}</dl>
             """);
         if (complaint.Length > 0)
             sb.Append($"""<p class="complaint"><strong>Reported problem:</strong> {E(complaint)}</p>""");

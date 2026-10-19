@@ -37,6 +37,7 @@ public sealed class RunSession(ReportStore store)
             RanAsAdmin = isAdmin,
             ToolVersion = ToolVersion,
             Sections = sections,
+            ComparedWith = intake.RunType == "after" && before is not null ? Path.GetFileName(before.JsonPath) : null,
         };
 
         var saved = store.Save(run);

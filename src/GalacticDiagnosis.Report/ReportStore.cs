@@ -70,8 +70,12 @@ public sealed class ReportStore(string folder)
             .ThenByDescending(r => r.Run.StartedAt)
             .FirstOrDefault();
 
-    public static string StemFor(DiagnosticRun run) =>
-        $"{FileSafe(LastName(run.Intake.CustomerName))}_{run.StartedAt:yyyy-MM-dd}_{run.Intake.RunType}";
+    /// <summary>Smith_2026-10-18_before, or Smith_J1042_2026-10-18_before when a job number is given.</summary>
+    public static string StemFor(DiagnosticRun run)
+    {
+        var job = string.IsNullOrWhiteSpace(run.Intake.JobNumber) ? "" : FileSafe(run.Intake.JobNumber.Trim().Replace(' ', '-')) + "_";
+        return $"{FileSafe(LastName(run.Intake.CustomerName))}_{job}{run.StartedAt:yyyy-MM-dd}_{run.Intake.RunType}";
+    }
 
     public static string LastName(string name)
     {

@@ -54,6 +54,12 @@ public sealed class Intake
 
     /// <summary>What the technician did. Asked on "after" runs and shown on the comparison report.</summary>
     public string WorkDone { get; set; } = "";
+
+    /// <summary>Optional shop job or ticket number; printed on the report and used in file names.</summary>
+    public string JobNumber { get; set; } = "";
+
+    /// <summary>Optional "Checked by" name.</summary>
+    public string TechnicianName { get; set; } = "";
 }
 
 public sealed class DiagnosticRun
@@ -64,6 +70,9 @@ public sealed class DiagnosticRun
     public required bool RanAsAdmin { get; init; }
     public required string ToolVersion { get; init; }
     public required List<SectionResult> Sections { get; init; }
+
+    /// <summary>For an after run: file name of the before run it was compared with, in the same folder.</summary>
+    public string? ComparedWith { get; set; }
 }
 
 public static class Verdicts

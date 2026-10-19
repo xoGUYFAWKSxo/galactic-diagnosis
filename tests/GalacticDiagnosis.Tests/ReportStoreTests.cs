@@ -47,6 +47,32 @@ public sealed class ReportStoreTests : IDisposable
     }
 
     [Fact]
+    public void Job_number_goes_in_the_file_name()
+    {
+        var run = Run("Pat Smith", "after", "PC1", 18);
+        run.Intake.JobNumber = " J 1042/b ";
+        Assert.Equal("Smith_J-1042b_2026-10-18_after", ReportStore.StemFor(run));
+        Assert.EndsWith("Smith_J-1042b_2026-10-18_comparison.html", ReportStore.ComparisonPath(@"C:\R\Smith_J-1042b_2026-10-18_after.json"));
+    }
+
+    [Fact]
+    public void Shop_details_print_on_both_reports()
+    {
+        var before = Run("Pat Smith", "before", "PC1", 16);
+        var after = Run("Pat Smith", "after", "PC1", 18);
+        after.Intake.JobNumber = "J1042";
+        after.Intake.TechnicianName = "Sam Tech";
+        after.Intake.WorkDone = "Removed startup programs";
+        var single = HtmlReport.Render(after);
+        Assert.Contains("J1042", single);
+        Assert.Contains("Sam Tech", single);
+        Assert.Contains("Removed startup programs", single);
+        var cmp = ComparisonReport.Render(Comparison.Build(before, after));
+        Assert.Contains("Checked by", cmp);
+        Assert.DoesNotContain("Checked by", HtmlReport.Render(before));
+    }
+
+    [Fact]
     public void Comparison_path_replaces_after()
     {
         Assert.EndsWith("Smith_2026-10-18_comparison.html", ReportStore.ComparisonPath(@"C:\R\Smith_2026-10-18_after.json"));
