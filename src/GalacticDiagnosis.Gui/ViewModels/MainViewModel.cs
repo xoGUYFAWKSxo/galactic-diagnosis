@@ -34,9 +34,13 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string? error;
 
+    /// <summary>A one-line confirmation (saved, copied) shown under the header until the next page change.</summary>
+    [ObservableProperty]
+    private string? notice;
+
     /// <summary>True while a check runs; navigation waits until it finishes or is cancelled.</summary>
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(NewCheckCommand), nameof(OpenReportCommand))]
+    [NotifyCanExecuteChangedFor(nameof(NewCheckCommand), nameof(OpenReportCommand), nameof(HistoryCommand))]
     private bool isBusy;
 
     partial void OnIsDarkChanged(bool value)
@@ -46,7 +50,17 @@ public sealed partial class MainViewModel : ObservableObject
         Settings.Save();
     }
 
-    partial void OnPageChanged(object value) => Error = null;
+    partial void OnPageChanged(object value) => (Error, Notice) = (null, null);
+
+    partial void OnErrorChanged(string? value)
+    {
+        if (value is not null) Notice = null;
+    }
+
+    partial void OnNoticeChanged(string? value)
+    {
+        if (value is not null) Error = null;
+    }
 
     bool CanNavigate() => !IsBusy;
 
@@ -55,6 +69,9 @@ public sealed partial class MainViewModel : ObservableObject
 
     [RelayCommand(CanExecute = nameof(CanNavigate))]
     private void NewCheck() => Page = new NewCheckViewModel(this);
+
+    [RelayCommand(CanExecute = nameof(CanNavigate))]
+    private void History() => Page = new HistoryViewModel(this);
 
     [RelayCommand(CanExecute = nameof(CanNavigate))]
     private void OpenReport()
@@ -82,6 +99,7 @@ public sealed partial class MainViewModel : ObservableObject
 
     public void Show(ReportViewModel report)
     {
+        report.Main = this;
         Page = report;
         // No WebView2 on this PC: the browser is the viewer.
         if (!WebViewHost.Available) report.OpenInBrowserCommand.Execute(null);

@@ -38,7 +38,28 @@ Plans: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md) (Phases 1–5, the console tool)
 - Model: `Intake.JobNumber` and `Intake.TechnicianName` print in both report headers as Job and Checked by. The job number goes in file names (`Smith_J1042_2026-10-18_before`). `DiagnosticRun.ComparedWith` records the before file. An after report now shows Work done.
 - The console gains `--job` and `--tech`.
 - 63 tests, including the `CollectorRunner` order, timeout and cancel tests.
-- Tested via UI Automation (unelevated dev run): before → after through the GUI wrote `User_J1042_2026-10-18_before`, `User_2026-10-18_after` and `_comparison`, which are the console's names. **Not yet tested:** a GUI check elevated (needs UAC), and Cancel by hand (an unelevated run finishes in about a second; covered by a unit test).
+- Tested via UI Automation (unelevated dev run). Before → after through the GUI wrote `User_J1042_2026-10-18_before`, `User_2026-10-18_after` and `_comparison`, which are the console's names. **Not yet tested:** a GUI check elevated (needs UAC), and Cancel by hand (an unelevated run finishes in about a second; covered by a unit test).
+
+## Done — Phase 9 (checklist, history, PDF, notes), 2026-10-18
+- **Technician checklist** (`Core/Checklist.cs`): 10 common jobs, each tagged with the sections it usually fixes.
+  - On the after form, jobs that match the before check's problems get a *Suggested* tag. Nothing is pre-ticked.
+  - Ticked jobs go in `Intake.WorkItems` (JSON `work_items`) and print as a list above the technician's own notes, on the after report and the comparison.
+- **Customer summary** (`SummaryReport`): one page covering what you told us, what we did, what changed, still needs attention (or what we found), and a compact "Good" list. It's a third tab in the viewer.
+- **Report viewer:**
+  - **Edit notes:** complaint for a before run, checklist plus notes for an after run. Saving rewrites the JSON, HTML and comparison.
+  - **Save as PDF:** `PrintToPdfAsync`, always light, A4 on metric regions and Letter elsewhere.
+  - **Leave a copy:** saves the summary and before/after PDFs to the Desktop.
+  - An after run re-renders its comparison from `compared_with` when the before file is still there. Older runs fall back to the saved `_comparison.html`.
+- **History** (Ctrl+H): every run in `Reports\`, newest first, with search (customer, job, computer, date, complaint) and a worst-verdict dot. You can Open one, Compare any two (the older counts as before) or Show in folder.
+- A green notice banner confirms saves.
+- 68 tests.
+- Tested via UI Automation (unelevated dev run):
+  - The checklist with suggestions, and the summary tab.
+  - Save as PDF wrote a 1-page summary PDF.
+  - Leave a copy wrote both PDFs to the Desktop (1 and 2 pages). They were deleted after the test.
+  - Edit notes updated the JSON and the comparison.
+  - The History search and comparing two runs.
+- **Note:** "Leave a copy" uses the Desktop of the account the tool runs as. If a technician elevates with a different admin account, the files land on that account's Desktop.
 
 ## Done — Phase 1 (skeleton), 2026-10-18
 - Solution `GalacticDiagnosis.sln`: `src/GalacticDiagnosis.Core` (collectors, model, WMI helpers), `src/GalacticDiagnosis.Report` (HTML), `src/GalacticDiagnosis.Console` (console, `GalacticDiagnosis-Console.exe`, `requireAdministrator` manifest).

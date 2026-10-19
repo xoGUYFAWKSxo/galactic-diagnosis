@@ -88,7 +88,7 @@ public sealed partial class RunningViewModel : ObservableObject
             var outcome = await new RunSession(Main.Store).RunAsync(_intake, _before,
                 s => ui.BeginInvoke(() => OnSectionDone(s)), _cts.Token);
             Main.IsBusy = false;
-            Main.Show(ReportViewModel.FromRun(outcome.Saved, outcome.ComparisonPath));
+            Main.Show(ReportViewModel.FromRun(outcome.Saved, outcome.Before));
         }
         catch (OperationCanceledException)
         {

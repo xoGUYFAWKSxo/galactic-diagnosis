@@ -52,8 +52,11 @@ public sealed class Intake
     /// <summary>"before" or "after".</summary>
     public string RunType { get; set; } = "before";
 
-    /// <summary>What the technician did. Asked on "after" runs and shown on the comparison report.</summary>
+    /// <summary>What the technician did, in their own words. Asked on "after" runs and shown on the comparison report.</summary>
     public string WorkDone { get; set; } = "";
+
+    /// <summary>Jobs ticked on the technician checklist (see <see cref="Checklist"/>), shown as a list above WorkDone.</summary>
+    public List<string> WorkItems { get; set; } = [];
 
     /// <summary>Optional shop job or ticket number; printed on the report and used in file names.</summary>
     public string JobNumber { get; set; } = "";

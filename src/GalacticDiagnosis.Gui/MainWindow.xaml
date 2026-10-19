@@ -14,11 +14,13 @@
         <local:VisibleWhen x:Key="Hidden" Invert="True" />
         <DataTemplate DataType="{x:Type vm:NewCheckViewModel}"><v:NewCheckView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:RunningViewModel}"><v:RunningView /></DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HistoryViewModel}"><v:HistoryView /></DataTemplate>
         <DataTemplate DataType="{x:Type vm:ReportViewModel}"><v:ReportView /></DataTemplate>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding OpenReportCommand}" />
         <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewCheckCommand}" />
+        <KeyBinding Key="H" Modifiers="Ctrl" Command="{Binding HistoryCommand}" />
     </Window.InputBindings>
 
     <DockPanel>
@@ -55,13 +57,19 @@
                             ToolTip="Drive health, startup time and some event logs need administrator rights.">
                         <TextBlock Text="Not administrator" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Alert}" />
                     </Border>
-                    <Button Style="{StaticResource QuietButton}" Command="{Binding NewCheckCommand}" ToolTip="Start a new check (Ctrl+N)">
+                    <Button Style="{StaticResource QuietButton}" Command="{Binding NewCheckCommand}" ToolTip="Start a new check (Ctrl+N)" AutomationProperties.Name="New check">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE710;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" VerticalAlignment="Center" Margin="0,0,8,0" />
                             <TextBlock Text="New check" />
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource QuietButton}" Command="{Binding OpenReportCommand}" ToolTip="Open a saved report (Ctrl+O)">
+                    <Button Style="{StaticResource QuietButton}" Command="{Binding HistoryCommand}" ToolTip="Saved checks (Ctrl+H)" AutomationProperties.Name="History">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE81C;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <TextBlock Text="History" />
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource QuietButton}" Command="{Binding OpenReportCommand}" ToolTip="Open a saved report (Ctrl+O)" AutomationProperties.Name="Open report">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8E5;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" VerticalAlignment="Center" Margin="0,0,8,0" />
                             <TextBlock Text="Open report" />
@@ -85,6 +93,12 @@
         <Border DockPanel.Dock="Top" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Alert}" BorderThickness="0,0,0,2"
                 Padding="18,8" Visibility="{Binding Error, Converter={StaticResource Visible}}">
             <TextBlock Text="{Binding Error}" Foreground="{DynamicResource Alert}" TextWrapping="Wrap" />
+        </Border>
+
+        <!-- One-line confirmation banner -->
+        <Border DockPanel.Dock="Top" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Good}" BorderThickness="0,0,0,2"
+                Padding="18,8" Visibility="{Binding Notice, Converter={StaticResource Visible}}">
+            <TextBlock Text="{Binding Notice}" Foreground="{DynamicResource Good}" TextWrapping="Wrap" AutomationProperties.Name="Notice" />
         </Border>
 
         <ContentControl Content="{Binding Page}" Focusable="False" />
