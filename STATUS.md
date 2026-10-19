@@ -37,7 +37,8 @@ Plan: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md)
 
 ## Done — Phase 5 (polish), 2026-10-18
 - README: screenshots (`docs/images/`), a what-it-checks table, usage, SmartScreen note and build steps.
-- Anonymised sample pages in `docs/sample/` (machine "SAMPLE-PC", customer "Jordan Rivera"; dev-PC hardware and startup data, with illustrative "before" numbers).
+- Sample pages in `docs/sample/` are built from hand-written, generic data for a laptop (`sample-before.json` / `sample-after.json`). No real machine data is used.
+- The activation section maps internal edition IDs to retail names (Core → Windows Home, Professional → Windows Pro).
 - `--render <run.json>` rebuilds a report from its data.
 - Published single-file exe (33.8 MB) verified elevated on the dev PC: all 10 sections read.
 - Screenshots were made with headless Edge (`--headless=new --screenshot --force-device-scale-factor=2`), then the empty page background was cropped off.

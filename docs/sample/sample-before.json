@@ -1,0 +1,374 @@
+{
+    "intake":  {
+                   "customer_name":  "Jordan Rivera",
+                   "complaint":  "Takes forever to start up and feels sluggish",
+                   "run_type":  "before",
+                   "work_done":  ""
+               },
+    "machine_name":  "SAMPLE-PC",
+    "started_at":  "2026-10-15T10:12:00-04:00",
+    "ran_as_admin":  true,
+    "tool_version":  "0.1.0",
+    "sections":  [
+                     {
+                         "id":  "hardware",
+                         "title":  "Hardware",
+                         "verdict":  "Good",
+                         "summary":  "The hardware was identified and nothing stands out.",
+                         "items":  [
+                                       {
+                                           "label":  "Windows",
+                                           "value":  "Microsoft Windows 11 Home (64-bit, build 26100)",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "Last restart",
+                                           "value":  "2026-10-09 08:41 (6 days ago)",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "Computer",
+                                           "value":  "Sample Computers Inc. Everyday Laptop 15",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "Processor",
+                                           "value":  "Intel(R) Core(TM) i5-1235U — 10 cores / 12 threads, 1.3 GHz base",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "Graphics",
+                                           "value":  "Intel(R) Iris(R) Xe Graphics, 2 GB, driver 31.0.101.5186, dated 2026-03-12",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "Memory",
+                                           "value":  "16 GB in 2 sticks, running at 3200 MT/s",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "  Channel A DIMM 0",
+                                           "value":  "8 GB Sample Memory SM-3200-8G",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "  Channel B DIMM 0",
+                                           "value":  "8 GB Sample Memory SM-3200-8G",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "Motherboard",
+                                           "value":  "Sample Computers Inc. 0X1Y2Z",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "BIOS",
+                                           "value":  "1.24.0 (2026-02-09)",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       }
+                                   ],
+                         "metrics":  {
+                                         "uptime_hours":  145.5,
+                                         "ram_gb":  16
+                                     },
+                         "error":  null,
+                         "elapsed_ms":  92,
+                         "not_applicable":  false
+                     },
+                     {
+                         "id":  "drive_health",
+                         "title":  "Drive health",
+                         "verdict":  "Good",
+                         "summary":  "All drives report healthy, with no wear or error concerns.",
+                         "items":  [
+                                       {
+                                           "label":  "Sample NVMe SSD 512GB",
+                                           "value":  "NVMe SSD, 512 GB — holds C:",
+                                           "verdict":  "Good",
+                                           "note":  "6% of rated life used · 38 °C · 4,210 hours powered on"
+                                       }
+                                   ],
+                         "metrics":  {
+                                         "disk0.wear_pct":  6,
+                                         "disk0.temp_c":  38,
+                                         "disk0.power_on_hours":  4210
+                                     },
+                         "error":  null,
+                         "elapsed_ms":  188,
+                         "not_applicable":  false
+                     },
+                     {
+                         "id":  "battery",
+                         "title":  "Battery",
+                         "verdict":  "Warning",
+                         "summary":  "The battery holds 64% of the charge it held when new, so it runs down noticeably faster than it used to. It\u0027s worth replacing if battery life matters.",
+                         "items":  [
+                                       {
+                                           "label":  "SMP Sample Battery 54Wh",
+                                           "value":  "holds 64% of its original charge (34.6 of 54 Wh), 487 charge cycles",
+                                           "verdict":  "Warning",
+                                           "note":  "Chemistry: LiP"
+                                       }
+                                   ],
+                         "metrics":  {
+                                         "battery.health_pct":  64.1,
+                                         "battery.cycles":  487
+                                     },
+                         "error":  null,
+                         "elapsed_ms":  1420,
+                         "not_applicable":  false
+                     },
+                     {
+                         "id":  "crashes",
+                         "title":  "Crashes",
+                         "verdict":  "Good",
+                         "summary":  "No blue screens or repeated crashes in the last 30 days.",
+                         "items":  [
+                                       {
+                                           "label":  "Blue screens",
+                                           "value":  "None",
+                                           "verdict":  "Good",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "Unexpected shutdowns",
+                                           "value":  "None",
+                                           "verdict":  "Good",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "Program crashes",
+                                           "value":  "2 across 1 program",
+                                           "verdict":  "Good",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "  photoeditor.exe",
+                                           "value":  "2 crashes",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "Crash dump files",
+                                           "value":  "None",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       }
+                                   ],
+                         "metrics":  {
+                                         "bsod_30d":  0,
+                                         "unexpected_shutdowns_30d":  0,
+                                         "app_crashes_30d":  2
+                                     },
+                         "error":  null,
+                         "elapsed_ms":  41,
+                         "not_applicable":  false
+                     },
+                     {
+                         "id":  "boot_time",
+                         "title":  "Startup time",
+                         "verdict":  "Bad",
+                         "summary":  "Windows took 128 seconds to start up last time. That\u0027s slow; a healthy PC is usually ready in under a minute. Most of that time is spent after the desktop appears, which usually means too many programs start with Windows.",
+                         "items":  [
+                                       {
+                                           "label":  "Last startup",
+                                           "value":  "128 seconds, on 2026-10-09",
+                                           "verdict":  "Bad",
+                                           "note":  "41 s to the sign-in screen and desktop, then 87 s for startup programs to settle."
+                                       },
+                                       {
+                                           "label":  "Typical startup",
+                                           "value":  "125 seconds (middle of the last 10 recorded)",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       }
+                                   ],
+                         "metrics":  {
+                                         "boot_ms":  128400,
+                                         "boot_main_path_ms":  41200,
+                                         "boot_median_ms":  124900
+                                     },
+                         "error":  null,
+                         "elapsed_ms":  38,
+                         "not_applicable":  false
+                     },
+                     {
+                         "id":  "startup",
+                         "title":  "Startup programs",
+                         "verdict":  "Warning",
+                         "summary":  "15 programs start automatically with Windows. Turning off the ones that aren\u0027t needed will make startup noticeably faster. 1 startup program (UpdaterHelper) isn\u0027t signed by a known maker or runs from an unusual folder. Worth confirming it\u0027s wanted.",
+                         "items":  [
+                                       {
+                                           "label":  "AudioService",
+                                           "value":  "Part of Windows or a device driver",
+                                           "verdict":  "Info",
+                                           "note":  "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\sampleaudio.inf_amd64\\AudioService64.exe"
+                                       },
+                                       {
+                                           "label":  "Cloud Backup",
+                                           "value":  "Signed by Sample Backup Ltd.",
+                                           "verdict":  "Info",
+                                           "note":  "C:\\Program Files\\Sample Backup\\backup-tray.exe"
+                                       },
+                                       {
+                                           "label":  "OneDrive",
+                                           "value":  "Signed by Microsoft Corporation",
+                                           "verdict":  "Info",
+                                           "note":  "C:\\Program Files\\Microsoft OneDrive\\OneDrive.exe"
+                                       },
+                                       {
+                                           "label":  "Password Manager",
+                                           "value":  "Signed by Sample Security Inc.",
+                                           "verdict":  "Info",
+                                           "note":  "C:\\Users\\Jordan\\AppData\\Local\\Programs\\PasswordManager\\PasswordManager.exe"
+                                       },
+                                       {
+                                           "label":  "SecurityHealth",
+                                           "value":  "Part of Windows or a device driver",
+                                           "verdict":  "Info",
+                                           "note":  "C:\\WINDOWS\\system32\\SecurityHealthSystray.exe"
+                                       },
+                                       {
+                                           "label":  "TouchpadHelper",
+                                           "value":  "Part of Windows or a device driver",
+                                           "verdict":  "Info",
+                                           "note":  "C:\\WINDOWS\\System32\\TouchpadHelper.exe"
+                                       },
+                                       {
+                                           "label":  "UpdaterHelper",
+                                           "value":  "Not signed by its maker",
+                                           "verdict":  "Warning",
+                                           "note":  "Runs from a temporary folder, which is unusual for a real program. C:\\Users\\Jordan\\AppData\\Local\\Temp\\upd\\UpdaterHelper.exe"
+                                       },
+                                       {
+                                           "label":  "More programs",
+                                           "value":  "8 other signed programs (chat, game launchers, printer and store helpers)",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       }
+                                   ],
+                         "metrics":  {
+                                         "startup_enabled":  15,
+                                         "startup_flagged":  1
+                                     },
+                         "error":  null,
+                         "elapsed_ms":  241,
+                         "not_applicable":  false
+                     },
+                     {
+                         "id":  "disk_space",
+                         "title":  "Disk space",
+                         "verdict":  "Warning",
+                         "summary":  "The Windows drive (C:) is getting full (87.2 GB left). Clearing some space is a good idea.",
+                         "items":  [
+                                       {
+                                           "label":  "C: — Windows",
+                                           "value":  "87.2 GB free of 476 GB (18% free)",
+                                           "verdict":  "Warning",
+                                           "note":  null
+                                       }
+                                   ],
+                         "metrics":  {
+                                         "C:.free_gb":  87.2,
+                                         "C:.free_pct":  18.3
+                                     },
+                         "error":  null,
+                         "elapsed_ms":  9,
+                         "not_applicable":  false
+                     },
+                     {
+                         "id":  "updates",
+                         "title":  "Windows updates",
+                         "verdict":  "Bad",
+                         "summary":  "Windows hasn\u0027t installed an update in 104 days, so it\u0027s missing months of security fixes. Windows Update needs attention.",
+                         "items":  [
+                                       {
+                                           "label":  "Windows version",
+                                           "value":  "24H2, build 26100.6899",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "Last update installed",
+                                           "value":  "2026-07-03 (104 days ago), KB5000000",
+                                           "verdict":  "Bad",
+                                           "note":  "Security Update"
+                                       },
+                                       {
+                                           "label":  "Updates listed",
+                                           "value":  "10",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       }
+                                   ],
+                         "metrics":  {
+                                         "days_since_update":  104
+                                     },
+                         "error":  null,
+                         "elapsed_ms":  455,
+                         "not_applicable":  false
+                     },
+                     {
+                         "id":  "antivirus",
+                         "title":  "Antivirus",
+                         "verdict":  "Good",
+                         "summary":  "Windows Defender is on and up to date.",
+                         "items":  [
+                                       {
+                                           "label":  "Windows Defender",
+                                           "value":  "On, up to date",
+                                           "verdict":  "Good",
+                                           "note":  null
+                                       }
+                                   ],
+                         "metrics":  {
+                                         "antivirus_enabled":  1
+                                     },
+                         "error":  null,
+                         "elapsed_ms":  47,
+                         "not_applicable":  false
+                     },
+                     {
+                         "id":  "activation",
+                         "title":  "Windows activation",
+                         "verdict":  "Good",
+                         "summary":  "Windows is activated.",
+                         "items":  [
+                                       {
+                                           "label":  "Status",
+                                           "value":  "Activated",
+                                           "verdict":  "Good",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "Edition",
+                                           "value":  "Windows Home",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       },
+                                       {
+                                           "label":  "License type",
+                                           "value":  "OEM (came with the PC)",
+                                           "verdict":  "Info",
+                                           "note":  null
+                                       }
+                                   ],
+                         "metrics":  {
+                                         "license_status":  1
+                                     },
+                         "error":  null,
+                         "elapsed_ms":  588,
+                         "not_applicable":  false
+                     }
+                 ]
+}

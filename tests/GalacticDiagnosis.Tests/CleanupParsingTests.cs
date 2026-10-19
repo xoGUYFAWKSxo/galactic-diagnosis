@@ -92,6 +92,18 @@ public class AntivirusTests
     }
 }
 
+public class ActivationTests
+{
+    [Theory]
+    [InlineData("Windows(R), Core edition", "Windows Home")]
+    [InlineData("Windows(R), CoreSingleLanguage edition", "Windows Home Single Language")]
+    [InlineData("Windows(R), Professional edition", "Windows Pro")]
+    [InlineData("Windows(R), Enterprise edition", "Windows Enterprise")]
+    [InlineData(null, "Windows")]
+    public void Maps_license_names_to_retail_names(string? name, string expected) =>
+        Assert.Equal(expected, ActivationCollector.EditionName(name));
+}
+
 public class UpdatesTests
 {
     [Theory]
