@@ -12,6 +12,7 @@ public partial class App : Application
         var settings = AppSettings.Load();
         // Hidden test switch: behave as if the WebView2 runtime were missing.
         WebViewHost.ForceUnavailable = e.Args.Contains("--no-webview2");
+        if (e.Args.Contains("--demo")) AppInfo.UseDemo();
         ThemeManager.Apply(settings.Theme switch { "dark" => true, "light" => false, _ => ThemeManager.WindowsPrefersDark() });
 
         var vm = new MainViewModel(settings);

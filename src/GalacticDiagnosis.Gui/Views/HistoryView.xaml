@@ -30,7 +30,7 @@
             <StackPanel>
                 <TextBlock Text="History" Style="{StaticResource H1}" />
                 <TextBlock Style="{StaticResource MutedText}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" ToolTip="{Binding Folder}">
-                    <Run Text="{Binding CountText, Mode=OneWay}" /><Run Text=" in " /><Run Text="{Binding Folder, Mode=OneWay}" />
+                    <Run Text="{Binding CountText, Mode=OneWay}" /><Run Text=" in the Reports folder next to the tool" />
                 </TextBlock>
             </StackPanel>
         </DockPanel>

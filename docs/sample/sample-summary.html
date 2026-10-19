@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your PC check — Jordan Rivera</title>
+<style>:root{--ink:#1d2433;--muted:#5d6678;--line:#e3e6ec;--bg:#f6f7f9;--card:#fff;
+  --good:#1f7a4d;--good-bg:#e3f4ea;--warning:#8a5a00;--warning-bg:#fdf1d8;--bad:#b42318;--bad-bg:#fde7e5;
+  --unavailable:#596273;--unavailable-bg:#eceef2;--info:#3b5bab;--info-bg:#e7edfb}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif}
+main{max-width:860px;margin:0 auto;padding:32px 16px 48px}
+h1{font-size:26px;margin:0 0 12px}
+h2{font-size:18px;margin:0 0 8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+header,section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 22px;margin-bottom:16px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 32px;margin:0}
+.meta dt{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.meta dd{margin:0;font-weight:600}
+.complaint{margin:14px 0 0}
+ul.work{margin:4px 0 0;padding-left:22px} ul.work li{margin:2px 0} .notes{margin:6px 0 0}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px;white-space:nowrap}
+.good{color:var(--good);background:var(--good-bg)} .warning{color:var(--warning);background:var(--warning-bg)}
+.bad{color:var(--bad);background:var(--bad-bg)} .unavailable{color:var(--unavailable);background:var(--unavailable-bg)}
+.info{color:var(--info);background:var(--info-bg)}
+.better{color:var(--good);background:var(--good-bg)} .worse{color:var(--bad);background:var(--bad-bg)} .same,.unknown{color:var(--unavailable);background:var(--unavailable-bg)}
+.glance ul{list-style:none;margin:0;padding:0}
+.glance li{display:grid;grid-template-columns:130px 1fr;gap:2px 12px;padding:10px 0;border-top:1px solid var(--line)}
+.glance li:first-child{border-top:0}
+.glance .pill{grid-row:span 2;align-self:start;justify-self:start}
+.glance a{color:var(--ink);font-weight:600;text-decoration:none}
+.glance .sum{color:var(--muted)}
+.summary{margin:0 0 12px}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;vertical-align:top;padding:7px 0;border-top:1px solid var(--line)}
+th{width:34%;font-weight:600;padding-right:16px}
+tr.sub th{font-weight:400;color:var(--muted);padding-left:16px}
+tr.sub th,tr.sub td{border-top:0;padding-top:2px;padding-bottom:2px;font-size:14px}
+td{overflow-wrap:anywhere}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;vertical-align:1px}
+.dot.good{background:var(--good)} .dot.warning{background:#d99100} .dot.bad{background:var(--bad)} .dot.unavailable{background:var(--unavailable)}
+.note{font-size:13px;color:var(--muted)}
+.tech{font-size:12px;color:var(--muted);margin:10px 0 0}
+footer{color:var(--muted);font-size:13px;padding:0 4px}
+@media (max-width:560px){.glance li{grid-template-columns:1fr}.glance .pill{grid-row:auto}th{width:42%}}
+@media screen and (prefers-color-scheme:dark){:root{color-scheme:dark;--ink:#ecf2fc;--muted:#8c9cb8;--line:#26305a;--bg:#0c1028;--card:#121a3a;
+  --good:#5fd49a;--good-bg:#123d2c;--warning:#ffc552;--warning-bg:#3d3011;--bad:#ff7a8e;--bad-bg:#45182a;
+  --unavailable:#a3adc2;--unavailable-bg:#232b48;--info:#8fb0ff;--info-bg:#1b2a55}}
+@media print{body{background:#fff;font-size:12px}main{padding:0;max-width:none}
+  header,section{border:0;border-bottom:1px solid var(--line);border-radius:0;padding:12px 0;break-inside:avoid}
+  .pill,.dot{-webkit-print-color-adjust:exact;print-color-adjust:exact}a{color:inherit}}.wins,.open{list-style:none;margin:0;padding:0}
+.wins li,.open li{display:flex;gap:12px;align-items:baseline;padding:8px 0;border-top:1px solid var(--line)}
+.wins li:first-child,.open li:first-child{border-top:0}
+.delta,.nochange{color:var(--muted)}
+.mismatch{margin:14px 0 0;padding:8px 12px;border-radius:8px;color:var(--warning);background:var(--warning-bg)}
+table.cmp thead th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600;border-top:0}
+table.cmp th:first-child{width:40%}
+table.cmp tr.row-same td,table.cmp tr.row-same th{color:var(--muted);font-weight:400}.summary-page h1{font-size:28px}
+.allgood{margin:12px 0 0;color:var(--muted)} .allgood .pill{margin-right:8px}
+@media print{.summary-page{font-size:13px}}</style>
+</head>
+<body>
+<main class="summary-page">
+<header>
+  <h1>Your PC check — Jordan Rivera</h1>
+  <dl class="meta">
+    <div><dt>Date</dt><dd>October 18, 2026</dd></div>
+    <div><dt>Computer</dt><dd>SAMPLE-PC</dd></div>
+  <div><dt>Job</dt><dd>J1042</dd></div><div><dt>Checked by</dt><dd>Sam</dd></div></dl><p class="complaint"><strong>You told us:</strong> Takes forever to start up and feels sluggish</p></header><section><h2>What we did</h2><ul class="work"><li>Turned off unneeded startup programs</li><li>Installed Windows updates</li><li>Cleaned up disk space</li><li>Removed malware or unwanted software</li></ul><p class="notes">Turned off 9 startup programs, including an unsigned updater running from Temp. Cleared 41 GB of temporary files.</p></section><section class="glance"><h2>What changed</h2><ul class="wins"><li><span class="pill better">Better</span><span><strong>Startup time (last boot):</strong> 128 s → 34 s <span class="delta">(94 s faster)</span></span></li><li><span class="pill better">Better</span><span><strong>Programs that start with Windows:</strong> 15 → 6 <span class="delta">(9 fewer)</span></span></li><li><span class="pill better">Better</span><span><strong>Free space on drive C:</strong> 87.2 GB → 128 GB <span class="delta">(+41.2 GB)</span></span></li><li><span class="pill better">Better</span><span><strong>Days since the last Windows update:</strong> 104 → 0 <span class="delta">(Updated)</span></span></li></ul></section><section><h2>Still needs attention</h2><ul class="open"><li><span class="pill warning">Needs attention</span><span><strong>Battery:</strong> The battery holds 64% of the charge it held when new, so it runs down noticeably faster than it used to. It&#39;s worth replacing if battery life matters.</span></li></ul><p class="allgood"><span class="pill good">Good</span> Hardware, Drive health, Crashes, Startup time, Startup programs, Disk space, Windows updates, Antivirus, Windows activation</p></section><footer>
+  <p>This page covers the main points. The full report has every detail we checked.</p>
+  <p class="tech">Galactic Diagnosis 0.2.0</p>
+</footer>
+</main>
+</body>
+</html>

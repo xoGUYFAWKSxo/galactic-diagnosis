@@ -78,6 +78,17 @@ Plans: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md) (Phases 1–5, the console tool)
   - The toggle hides the panel.
 - **Not yet tested:** the other shortcuts (each needs a PC with that finding, or an elevated run).
 
+## Done — Phase 11 (polish, release prep), 2026-10-18
+- Version 0.2.0.
+- Keyboard: Ctrl+N new check, Ctrl+Enter start, Ctrl+H history, Ctrl+O open. Window size and theme are remembered (Phase 7).
+- Checklist entries wrap their *Suggested* tag instead of clipping it.
+- History says "in the Reports folder next to the tool"; the full path is in the tooltip. This keeps local paths out of screenshots.
+- Hidden `--demo` switch: shows the sample PC's name (`SAMPLE-PC`) and an Administrator badge, so README screenshots made from `docs/sample` contain no real machine data.
+- Console `--summary <run.json>` writes the one-page customer summary. Its usage text now names `GalacticDiagnosis-Console`.
+- Sample data: `sample-after.json` gained `work_items`, a job number, a technician and `compared_with`. The sample pages were re-rendered, and `docs/sample/sample-summary.html` was added.
+- README rewritten for the app: GUI screenshots in both themes (`docs/images/gui-*.png`, from `--demo` with sample data only), the two exes, keyboard, an honest note on network use, and build steps.
+- **Release v0.2.0 (not yet done):** merge PRs #7 to #12 in order, publish both exes from main, and attach them with their SHA-256 hashes.
+
 ## Done — Phase 1 (skeleton), 2026-10-18
 - Solution `GalacticDiagnosis.sln`: `src/GalacticDiagnosis.Core` (collectors, model, WMI helpers), `src/GalacticDiagnosis.Report` (HTML), `src/GalacticDiagnosis.Console` (console, `GalacticDiagnosis-Console.exe`, `requireAdministrator` manifest).
 - `ICollector` + `CollectorRunner`: parallel, per-collector timeout and try/catch → "Couldn't check" instead of a crash.
@@ -108,7 +119,7 @@ Plans: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md) (Phases 1–5, the console tool)
 - `RunFile` (Core) saves and loads the JSON. Section `Items` and `Metrics` are `init`-able so they survive deserialization.
 - `Comparison.Build(before, after)`: a table of known metrics with friendly labels, units, better/worse direction and a noise tolerance (boot ±2 s, disk ±0.5 GB). Metrics without a definition (temperatures, 30-day crash counts) are left out, and their sections still show verdict changes.
 - `ComparisonReport`: Results (one headline per area), Measurements, Area by area, Still needs attention. It warns if the two runs come from different PCs.
-- An after run auto-finds the latest before run from the same PC in `Reports` (preferring the same customer name) and writes `<Name>_<date>_comparison.html`. Manual: `GalacticDiagnosis --compare before.json after.json`.
+- An after run auto-finds the latest before run from the same PC in `Reports` (preferring the same customer name) and writes `<Name>_<date>_comparison.html`. Manual: `GalacticDiagnosis-Console --compare before.json after.json`.
 - 43 tests. Verified the auto-compare on a real before/after pair, and checked the rendered page with a doctored "slow PC" before file.
 
 ## Done — Phase 5 (polish), 2026-10-18
@@ -122,8 +133,13 @@ Plans: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md) (Phases 1–5, the console tool)
 ## Still untested
 - Battery on a real laptop, a SATA SSD, and a PC with recent blue screens (see the plan's testing checklist).
 - Verdict wording with a non-technical reader.
+- The GUI run elevated (every GUI test so far ran the dll unelevated through `dotnet`), and cancelling a real elevated check by hand.
+- Fix-it shortcuts other than Reliability history, the battery report on a laptop, and "Leave a copy" when elevated with a different admin account.
+- High-DPI scaling (125%/150%) and an older Windows 10 PC without WebView2 (the fallback was only simulated with `--no-webview2`).
 
 ## Build / run
-- Publish: `dotnet publish src\GalacticDiagnosis.Console -c Release -o publish` → `publish\GalacticDiagnosis-Console.exe` (~34 MB, self-contained, single file).
+- Publish: `dotnet publish src\GalacticDiagnosis.Gui -c Release -o publish` → `publish\GalacticDiagnosis.exe` (~65 MB), and `dotnet publish src\GalacticDiagnosis.Console -c Release -o publish` → `publish\GalacticDiagnosis-Console.exe` (~34 MB). Both are self-contained single files.
+- GUI dev run without UAC: `dotnet src\GalacticDiagnosis.Guiin\Release
+et8.0-windows\win-x64\GalacticDiagnosis.dll [run.json] [--demo] [--no-webview2]`.
 - Dev run without UAC: `dotnet src\GalacticDiagnosis.Console\bin\Release\net8.0-windows\win-x64\GalacticDiagnosis-Console.dll --no-prompt --name "Test User"` (running the dll through `dotnet` skips the admin manifest).
 - `nuget.config` is required: the machine's global NuGet config has no package sources.

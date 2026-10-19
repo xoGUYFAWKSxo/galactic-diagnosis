@@ -208,7 +208,7 @@ public sealed partial class ReportViewModel : ObservableObject
         Title = TitleFor(run);
 
         FixItems.Clear();
-        if (run.MachineName.Equals(Environment.MachineName, StringComparison.OrdinalIgnoreCase))
+        if (run.MachineName.Equals(AppInfo.MachineName, StringComparison.OrdinalIgnoreCase))
             foreach (var s in run.Sections.Where(s => !s.NotApplicable && s.Verdict is Verdict.Warning or Verdict.Bad).OrderByDescending(s => s.Verdict))
                 FixItems.Add(new FixItemViewModel(s));
         ShowFixPanel = FixItems.Count > 0;

@@ -1,5 +1,7 @@
 # Galactic Diagnosis — GUI Plan
 
+> **Status:** Phases 6–11 are built (stacked PRs #7–#12). STATUS.md has what was tested, what wasn't, and the network findings. Release v0.2.0 waits on the merges.
+
 ## Goal
 
 A windowed version of Galactic Diagnosis. The technician fills in the intake, watches the checks run, and reads the report in the same window, with no console and no separate browser. The rules from the original plan still hold:

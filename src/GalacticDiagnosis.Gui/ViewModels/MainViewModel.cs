@@ -20,8 +20,8 @@ public sealed partial class MainViewModel : ObservableObject
 
     public AppSettings Settings { get; }
     public ReportStore Store { get; } = ReportStore.Default;
-    public string MachineName { get; } = Environment.MachineName;
-    public bool IsAdmin { get; } = CollectorRunner.IsAdmin();
+    public string MachineName { get; } = AppInfo.MachineName;
+    public bool IsAdmin { get; } = AppInfo.IsAdmin;
     public string VersionText { get; } = $"v{RunSession.ToolVersion}";
 
     [ObservableProperty]
