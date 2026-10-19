@@ -37,6 +37,9 @@ public sealed class SectionResult
 
     public double ElapsedMs { get; set; }
 
+    /// <summary>The section doesn't apply to this PC (e.g. battery on a desktop). Kept in JSON, left out of the report.</summary>
+    public bool NotApplicable { get; set; }
+
     public static SectionResult Unavailable(string id, string title, string summary, string? error = null) =>
         new() { Id = id, Title = title, Verdict = Verdict.Unavailable, Summary = summary, Error = error };
 }

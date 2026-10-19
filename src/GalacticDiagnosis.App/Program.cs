@@ -42,7 +42,7 @@ static class Program
 
         var intake = ReadIntake(args);
 
-        ICollector[] collectors = [new HardwareCollector(), new DiskSpaceCollector()];
+        ICollector[] collectors = [new HardwareCollector(), new DriveHealthCollector(), new BatteryCollector(), new CrashCollector(), new DiskSpaceCollector()];
         Console.WriteLine($"\nChecking {collectors.Length} areas...");
         var startedAt = DateTimeOffset.Now;
         var sections = await CollectorRunner.RunAllAsync(collectors, isAdmin, s =>

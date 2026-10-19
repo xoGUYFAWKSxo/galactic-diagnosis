@@ -13,7 +13,8 @@ public static class HtmlReport
         var title = string.IsNullOrWhiteSpace(run.Intake.CustomerName)
             ? "PC Health Report"
             : $"PC Health Report — {run.Intake.CustomerName}";
-        var overall = Verdicts.Worst(run.Sections.Select(s => s.Verdict));
+        var sections = run.Sections.Where(s => !s.NotApplicable).ToList();
+        var overall = Verdicts.Worst(sections.Select(s => s.Verdict));
 
         sb.Append($"""
             <!doctype html>
@@ -43,11 +44,11 @@ public static class HtmlReport
               <h2>At a glance <span class="pill {Cls(overall)}">{Label(overall)}</span></h2>
               <ul>
             """);
-        foreach (var s in run.Sections)
+        foreach (var s in sections)
             sb.Append($"""<li><span class="pill {Cls(s.Verdict)}">{Label(s.Verdict)}</span><a href="#{E(s.Id)}">{E(s.Title)}</a><span class="sum">{E(s.Summary)}</span></li>""");
         sb.Append("</ul></section>");
 
-        foreach (var s in run.Sections)
+        foreach (var s in sections)
         {
             sb.Append($"""
                 <section class="detail" id="{E(s.Id)}">
