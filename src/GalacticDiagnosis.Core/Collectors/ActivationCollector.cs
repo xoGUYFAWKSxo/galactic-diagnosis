@@ -27,7 +27,7 @@ public sealed class ActivationCollector : ICollector
         // An activated product wins if several keys are installed.
         var p = products.OrderBy(x => x.Long("LicenseStatus") == 1 ? 0 : 1).First();
         var status = p.Long("LicenseStatus") ?? 0;
-        var edition = (p.Str("Name") ?? "Windows").Replace("Windows(R), ", "Windows ").Replace(" edition", "");
+        var edition = EditionName(p.Str("Name"));
         var channel = Channel(p.Str("Description"));
         r.Metrics["license_status"] = status;
 
@@ -44,6 +44,23 @@ public sealed class ActivationCollector : ICollector
         if (status != 1 && p.Long("GracePeriodRemaining") is > 0 and var minutes)
             r.Items.Add(new("Grace period left", $"{minutes / 60 / 24} days"));
         return r;
+    }
+
+    /// <summary>"Windows(R), Core edition" → "Windows Home". License names use internal edition IDs, not retail names.</summary>
+    public static string EditionName(string? licenseName)
+    {
+        var id = (licenseName ?? "").Replace("Windows(R),", "").Replace("edition", "").Trim();
+        return id switch
+        {
+            "" => "Windows",
+            "Core" => "Windows Home",
+            "CoreSingleLanguage" => "Windows Home Single Language",
+            "CoreCountrySpecific" => "Windows Home (China)",
+            "Professional" => "Windows Pro",
+            "ProfessionalWorkstation" => "Windows Pro for Workstations",
+            "ProfessionalEducation" => "Windows Pro Education",
+            _ => $"Windows {id}",
+        };
     }
 
     static string? Channel(string? description)

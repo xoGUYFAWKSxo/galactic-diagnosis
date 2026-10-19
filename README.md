@@ -8,7 +8,7 @@ A Windows PC health check for repair technicians. Run it from a USB stick on a c
 - **Written for the customer.** Every section gets a verdict (Good, Needs attention, Problem) and a sentence a non-technical person can follow.
 - **Nothing leaves the machine.** It reads only built-in Windows sources (WMI, the event log, the registry) and makes no network calls.
 
-Sample pages: [health report](docs/sample/sample-report.html) · [before/after comparison](docs/sample/sample-comparison.html) (download them and open in a browser). The data is anonymised and the "before" numbers are illustrative.
+Sample pages: [health report](docs/sample/sample-report.html) · [before/after comparison](docs/sample/sample-comparison.html) (download them and open in a browser). They're built from made-up data for a generic laptop; try `--compare docs\sample\sample-before.json docs\sample\sample-after.json` to regenerate the comparison.
 
 ## What it checks
 
