@@ -61,6 +61,23 @@ Plans: [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md) (Phases 1–5, the console tool)
   - The History search and comparing two runs.
 - **Note:** "Leave a copy" uses the Desktop of the account the tool runs as. If a technician elevates with a different admin account, the files land on that account's Desktop.
 
+## Done — Phase 10 (fix-it shortcuts, Check again, Copy summary), 2026-10-18
+- **Fix it panel** (beside the report, toggled from the toolbar): one card per section that needs attention.
+  - It shows only for a run made on this PC, because the shortcuts act on this PC.
+  - The shortcuts (`Gui/Services/FixIts.cs`) follow the table in GUI_PLAN.md. Settings pages and Windows Security open through Explorer as the signed-in user; Device Manager, Disk Management, Disk Cleanup and Task Manager open elevated like the app. Drive health adds a back-up note, and the battery report is generated locally by `powercfg`.
+  - `perfmon /rel` hands off to an Explorer Control Panel window (Reliability Monitor) and exits straight away.
+- **Check again:** re-runs one collector and shows the new verdict and summary under the finding. It never changes the saved files.
+- **Copy summary** (`Report/SummaryText.cs`): a plain-text version of the customer summary on the clipboard.
+- `ComparisonReport.Headlines` is shared by the HTML Results list and the text summary.
+- Open in browser and Show in folder are icon-only buttons now, to fit the toolbar.
+- 70 tests.
+- Tested via UI Automation (unelevated dev run):
+  - The panel showed Crashes with Reliability history; the shortcut opened Reliability Monitor (closed after the test).
+  - Check again updated the card.
+  - Copy summary text was checked from the clipboard.
+  - The toggle hides the panel.
+- **Not yet tested:** the other shortcuts (each needs a PC with that finding, or an elevated run).
+
 ## Done — Phase 1 (skeleton), 2026-10-18
 - Solution `GalacticDiagnosis.sln`: `src/GalacticDiagnosis.Core` (collectors, model, WMI helpers), `src/GalacticDiagnosis.Report` (HTML), `src/GalacticDiagnosis.Console` (console, `GalacticDiagnosis-Console.exe`, `requireAdministrator` manifest).
 - `ICollector` + `CollectorRunner`: parallel, per-collector timeout and try/catch → "Couldn't check" instead of a crash.

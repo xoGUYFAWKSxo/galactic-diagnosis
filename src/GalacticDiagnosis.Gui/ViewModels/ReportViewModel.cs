@@ -44,6 +44,40 @@ public sealed partial class ReportViewModel : ObservableObject
     [ObservableProperty]
     private ReportTab? selected;
 
+    ComparisonResult? _comparison;
+
+    // ---- Fix it ----
+
+    /// <summary>Sections that need attention, with shortcuts. Only for a run made on this PC: the tools act on this PC.</summary>
+    public ObservableCollection<FixItemViewModel> FixItems { get; } = [];
+    public bool HasFixItems => FixItems.Count > 0;
+
+    [ObservableProperty]
+    private bool showFixPanel;
+
+    [RelayCommand]
+    private void ToggleFixPanel() => ShowFixPanel = !ShowFixPanel;
+
+    // ---- Copy summary ----
+
+    public bool CanCopySummary => Run is not null || _comparison is not null;
+
+    [RelayCommand]
+    private void CopySummary()
+    {
+        var run = Run?.Run ?? _comparison?.After;
+        if (run is null) return;
+        try
+        {
+            System.Windows.Clipboard.SetText(SummaryText.Render(run, _comparison));
+            if (Main is not null) Main.Notice = "Summary copied. Paste it into an invoice, ticket or message.";
+        }
+        catch (System.Runtime.InteropServices.COMException)
+        {
+            if (Main is not null) Main.Error = "Couldn't copy to the clipboard. Another program may be using it; try again.";
+        }
+    }
+
     // ---- Edit notes ----
 
     [ObservableProperty]
@@ -163,7 +197,7 @@ public sealed partial class ReportViewModel : ObservableObject
         Tabs.Add(new(TabKind.Report, "Report", HtmlReport.Render(run), saved.HtmlPath));
 
         Before ??= LoadComparedWith(saved);
-        var comparison = run.Intake.RunType == "after" && Before is not null ? Comparison.Build(Before.Run, run) : null;
+        var comparison = _comparison = run.Intake.RunType == "after" && Before is not null ? Comparison.Build(Before.Run, run) : null;
         Tabs.Add(new(TabKind.Summary, "Customer summary", SummaryReport.Render(run, comparison), null));
 
         var cmpPath = ReportStore.ComparisonPath(saved.JsonPath);
@@ -172,6 +206,13 @@ public sealed partial class ReportViewModel : ObservableObject
         else if (run.Intake.RunType == "after" && File.Exists(cmpPath))
             Tabs.Add(new(TabKind.Comparison, "Before vs after", File.ReadAllText(cmpPath), cmpPath)); // older runs without compared_with
         Title = TitleFor(run);
+
+        FixItems.Clear();
+        if (run.MachineName.Equals(Environment.MachineName, StringComparison.OrdinalIgnoreCase))
+            foreach (var s in run.Sections.Where(s => !s.NotApplicable && s.Verdict is Verdict.Warning or Verdict.Bad).OrderByDescending(s => s.Verdict))
+                FixItems.Add(new FixItemViewModel(s));
+        ShowFixPanel = FixItems.Count > 0;
+        OnPropertyChanged(nameof(HasFixItems));
         OnPropertyChanged(nameof(CanLeaveCopy));
     }
 
@@ -198,7 +239,10 @@ public sealed partial class ReportViewModel : ObservableObject
     {
         var (older, newer) = a.Run.StartedAt <= b.Run.StartedAt ? (a, b) : (b, a);
         var comparison = Comparison.Build(older.Run, newer.Run);
-        var vm = new ReportViewModel($"Comparing {older.Run.StartedAt:MMM d, h:mm tt} with {newer.Run.StartedAt:MMM d, h:mm tt}", null, older);
+        var vm = new ReportViewModel($"Comparing {older.Run.StartedAt:MMM d, h:mm tt} with {newer.Run.StartedAt:MMM d, h:mm tt}", null, older)
+        {
+            _comparison = comparison,
+        };
         vm.Tabs.Add(new(TabKind.Comparison, "Before vs after", ComparisonReport.Render(comparison), null));
         vm.Tabs.Add(new(TabKind.Summary, "Customer summary", SummaryReport.Render(newer.Run, comparison), null));
         vm.Selected = vm.Tabs[0];
